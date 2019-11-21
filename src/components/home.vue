@@ -1,0 +1,375 @@
+<template>
+    <div class="home_contaner">
+        <!-- 侧边栏 style="display:none;" -->
+        <el-aside :width="isCollapse ? '64px':'220px'">
+            <div class="logo"><i>LOGO</i> SRM系统</div>
+            <!-- 导航菜单start -->
+            <el-menu default-active="1-4-1" class="el-menu-vertical-demo" background-color="#24262F" text-color="#fff" unique-opened active-text-color="#fff" :collapse="isCollapse">
+                <!-- <el-submenu index="1">
+                    <template slot="title">
+                    <i class="el-icon-location"></i>
+                    <span slot="title">采购协同</span>
+                    </template>
+                    <el-menu-item-group>
+                    <el-menu-item index="1-1">采购订单</el-menu-item>
+                    <el-menu-item index="1-2">在线收货确认</el-menu-item>
+                    <el-menu-item index="1-3">发票信息确认</el-menu-item>
+                    </el-menu-item-group>
+                </el-submenu> -->
+                <!-- 一级菜单 -->
+                <el-submenu :index="item.menuId + ''" v-for="item in menulist" :key="item.menuId">
+                    <template slot="title">
+                        <!-- 图标 -->
+                        <i :class="item.icon"></i>
+                        <span>{{item.name}}</span>
+                    </template>
+                    <!-- 二级菜单 -->
+                    <el-menu-item></el-menu-item>
+                </el-submenu>
+            </el-menu>
+            <!-- 导航菜单end -->
+        </el-aside>
+        <el-container>
+            <!-- 主体头部 -->
+            <el-header>
+                <a @click="hiddenAside"><i class="iconfont icon-zhankai-"></i></a>宁波香格里拉供应链有限公司
+                <span>普通会员</span>
+                <div class="el_header_right">
+                    <el-badge :value="200" :max="99">
+                        <el-button class="el-icon-bell"></el-button>
+                    </el-badge>
+                    <a href="javascript:;" class="iconfont icon-zhankai"></a>
+                    <el-dropdown trigger="click">
+                        <span class="el-dropdown-link">
+                            <img src="../assets/img/defaultHead.jpg" alt="">
+                            下拉菜单<i class="el-icon-caret-bottom el-icon--right"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <a @click="personRouter()"><el-dropdown-item>个人中心</el-dropdown-item></a>
+                            <el-dropdown-item>密码修改</el-dropdown-item>
+                            <a @click="logout"><el-dropdown-item>退出登录</el-dropdown-item></a>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+            </el-header>
+            <!-- 主体内容区 -->
+            <el-main>
+                <!-- 主体内容导航栏   @click="addTab(editableTabsValue2)"-->
+                <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
+                    <!-- 主体导航栏主页 -->
+                    <el-tab-pane>
+                        <span slot="label" @click="$router.push('/index')"><i class="iconfont icon-zhuye"></i></span>
+                        <router-view></router-view>
+                    </el-tab-pane>
+                    <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name" closable>
+                        <span slot="label" @click="$router.push(item.url)">{{item.title}}</span>
+                        <router-view></router-view>
+                    </el-tab-pane>
+                </el-tabs>
+                <!-- 尾部按钮 -->
+                <el-dropdown>
+                    <span class="el-dropdown-link">
+                        <i class="iconfont icon-jiantouxia el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <a @click="closeOnePage()"><el-dropdown-item>关闭当前页面</el-dropdown-item></a>
+                        <a @click="closeOtherPage()"><el-dropdown-item>关闭其他页面</el-dropdown-item></a>
+                        <a @click="closeAllPage()"><el-dropdown-item>关闭所有页面</el-dropdown-item></a>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </el-main>
+            <el-footer>
+                <div class="footer_left">
+                    <span>
+                        <a href="javascript:;">网站首页</a> |
+                        <a href="javascript:;">帮助中心</a> |
+                        <a href="javascript:;">联系我们</a> |
+                        <a href="javascript:;">招聘信息</a> |
+                        <a href="javascript:;">客户服务</a> |
+                        <a href="javascript:;">隐私政策</a> |
+                        <a href="javascript:;">广告服务</a> |
+                        <a href="javascript:;">网站地图</a> |
+                        <a href="javascript:;">意见反馈</a>
+                    </span>
+                </div>
+                <div class="footer_right">
+                    <a href="javascript:;">
+                        <img src="../assets/img/defaultHead.jpg"/>
+                        <p>公众号</p>
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../assets/img/defaultHead.jpg"/>
+                        <p>微博</p>
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../assets/img/defaultHead.jpg"/>
+                        <p>400-888-888</p>
+                    </a>
+                    <a href="javascript:;">
+                        <img src="../assets/img/defaultHead.jpg"/>
+                        <p>发送邮件</p>
+                    </a>
+                </div>
+            </el-footer>
+        </el-container>
+    </div>
+</template>
+<script>
+import { logoutApi, getMenuListApi } from '@/api'
+export default {
+  data() {
+    return {
+      // 控制侧边栏的显示和隐藏
+      isCollapse: false,
+      // 控制标签页的当前下标
+      editableTabsValue: '0',
+      // 标签页渲染数组
+      editableTabs: [],
+      tabIndex: 2,
+      // 左侧菜单栏列表
+      menulist: []
+    }
+  },
+  created() {
+    this.getMenuList()
+  },
+  methods: {
+    // 隐藏侧边栏
+    hiddenAside() {
+      this.isCollapse = !this.isCollapse
+    },
+    // 个人中心路由跳转
+    personRouter() {
+      this.$router.push('/personalCenter')
+      this.addTab(this.editableTabsValue, '个人中心', '/personalCenter')
+    },
+    // 添加标签页
+    addTab(targetName, title, url) {
+      let newTabName = ++this.tabIndex + ''
+      this.editableTabs.push({
+        title: title,
+        name: newTabName,
+        url: url
+      })
+      this.editableTabsValue = newTabName
+      this.$router.push(url)
+    },
+    // 移除标签
+    removeTab(targetName) {
+      let tabs = this.editableTabs
+      let activeName = this.editableTabsValue
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1]
+            if (nextTab) {
+              activeName = nextTab.name
+            } else {
+              this.$router.push('/index')
+              window.location.reload()
+            }
+          }
+        })
+      }
+      this.editableTabsValue = activeName
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName)
+    },
+    // 导航栏下拉关闭当前页面
+    closeOnePage() {
+      const lastPage = this.editableTabs[this.editableTabs.length - 1]
+      this.removeTab(lastPage.name)
+    //   this.editableTabs.forEach((item) => {
+    //     console.log(item.name)
+    //   })
+    },
+    // 导航栏下拉关闭其他页面
+    closeOtherPage() {
+      const lastPage = this.editableTabs[this.editableTabs.length - 1]
+      this.editableTabs = []
+      this.editableTabs.push(lastPage)
+    },
+    // 导航栏下拉关闭所有页面
+    closeAllPage() {
+      this.editableTabs = []
+      this.$router.push('/index')
+      window.location.reload()
+    },
+    // 退出登录状态
+    async logout() {
+      const { data: res } = await logoutApi()
+      console.log(res)
+      if (res.code !== 0) return this.$message.error('退出登录失败!')
+      window.sessionStorage.removeItem('code')
+      this.$router.push('/login')
+    },
+    async getMenuList() {
+      const { data: res } = await getMenuListApi()
+      this.menulist = res.data.menuList
+      console.log(this.menulist)
+    }
+  }
+}
+</script>
+<style scoped lang='less'>
+.home_contaner {
+    display: flex;
+    height: 100%;
+}
+// 侧边栏
+.el-aside {
+    height: 100%;
+    background-color: #24262F;
+}
+.el-aside .logo {
+    height: 50px;
+    width: 100%;
+    background-color: #3483b0;
+    text-align: center;
+    line-height: 50px;
+    font-family:SourceHanSansCN;
+    color: #fff;
+    font-size: 19px;
+}
+.el-aside .logo i {
+    height:17px;
+    font-size:23px;
+    font-weight:400;
+    color:rgba(255,131,131,1);
+    line-height:35px;
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+    border: 0;
+    width: 220px;
+    min-height: 400px;
+}
+
+// 内容区
+.el-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: pink;
+}
+// 内容区头部
+.el-header {
+    position: relative;
+    height: 50px !important;
+    background-color: #3C8DBC;
+    line-height: 50px;
+    color: #fff;
+}
+.el-header a {
+    margin: 0 24px;
+    width: 19px;
+    height: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.el-header span {
+    margin: 0 20px;
+    font-size: 14px;
+}
+.el-header .el-button {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    background-color: #3C8DBC;
+    border: 0px;
+}
+.el_header_right {
+    position: absolute;
+    display: inline-block;
+    right: 0;
+    height: 100%;
+    width: 240px;
+    font-size: 14px;
+}
+.el_header_right a {
+    font-size: 18px;
+    margin-left: 30px;
+    margin-right: 0;
+}
+// 头部下拉列表
+.el-header .el-dropdown {
+    vertical-align: middle;
+    cursor: pointer;
+    color: #fff;
+}
+.el-header .el-dropdown-link {
+    padding-bottom: 10px;
+    display: inline-block;
+}
+.el-header .el-dropdown-link img {
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+.el-main .el-tabs span {
+    display: inline-block;
+    text-align: center;
+    padding: 0 0 0 15px;
+    height: 100%;
+}
+
+.el-main .el-tabs:nth-child(1) .el-tabs__item:nth-child(1)  span {
+    padding: 0 20px;
+}
+.el-main {
+    flex: 1;
+    position: relative;
+    background-color: #fff;
+    padding: 0;
+}
+// 导航条下拉列表
+.el-main .el-dropdown {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-left: 1px solid rgba(238,238,238,1);
+}
+.el-main .el-dropdown i {
+    margin: 5px;
+    font-size: 30px;
+}
+.el-footer {
+    display: flex;
+    height: 80px !important;
+    width: 100%;
+    background-color: #383a42;
+}
+.footer_left {
+    height: 100%;
+    width: 75%;
+    line-height: 80px;
+    color: #fff;
+}
+.footer_left a{
+    color: #fff;
+}
+.footer_right {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    width: 25%;
+}
+.footer_right>a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+}
+.footer_right>a img {
+    width: 40px;
+    height: 30px;
+    margin: 5px 10px;
+}
+.footer_right>a p {
+    white-space:nowrap;
+    color: #fff;
+}
+</style>

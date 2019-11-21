@@ -1,0 +1,217 @@
+html,
+body,
+h1,
+h2,
+h3,
+#app {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: "Microsoft YaHei", tahoma, arial, 'Hiragino Sans GB', '\5b8b\4f53', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-width:1900px;
+	/* overflow:auto; */
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+i {
+    font-style: normal;
+}
+li {
+    list-style: none;
+}
+div {
+    /* 设置文字无法选中 */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+/* 登陆界面 */
+.login_container .el-tabs__item {
+    box-sizing: border-box;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 20px;
+    margin: 16px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+.login_container .el-tabs__header {
+    margin-bottom: 30px;
+}
+.el-tabs__nav {
+    margin: 0 20px;
+}
+.login_container .el-tabs__active-bar {
+    margin-left: -20px;
+    width: 104px !important;
+}
+.login_container .el-form-item .el-form-item__content {
+    height: 50px;
+    line-height: 50px;
+}
+.login_container .el-input__inner {
+    height: 50px;
+}
+
+/* 注册页面 */
+/* 弹出框样式 */
+.el-dialog {
+    width: 700px !important;
+    height: 600px;
+    border: 0;
+    border-radius: 6px;
+}
+.el-dialog__header {
+    padding: 15px 20px;
+    line-height: 28px;
+    background-color: #3C8DBC;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.el-dialog__header span {
+    color: #fff;
+    font-size: 18px;
+}
+.el-dialog__header .el-icon-close:before {
+    color: #fff;
+    font-size: 20px;
+}
+.el-dialog__body {
+    padding: 20px;
+    box-sizing: border-box;
+    height: 462px;
+    overflow: auto;
+}
+.el-dialog__footer {
+    padding: 20px;
+    text-align: center;
+}
+.el-dialog__footer .el-button {
+    margin: 0 30px;
+    width: 80px;
+}
+/* home页面 */
+.home_contaner .el-header {
+    height: 50px !important;
+    padding: 0;
+}
+/* 通知消息按钮样式 */
+.home_contaner .el-badge__content {
+    top: 10px !important;
+    border: 0px;
+}
+.el-icon-bell::before {
+    color: #fff;
+}
+/* 侧边栏箭头图标颜色 */
+.el-icon-arrow-down:before {
+    color: #fff;
+    font-size: 16px;
+}
+.el-submenu {
+    box-sizing: border-box;
+}
+/* 侧边栏文字颜色 */
+.el-submenu__title {
+    font-size: 16px;
+}
+/* 鼠标经过大导航背景颜色 */
+.el-submenu__title:hover {
+    background-color: rgba(44,46,56,1) !important;
+}
+.el-menu-item {
+    border-left: 3px solid #24262F;
+}
+/* 鼠标经过小导航背景颜色 */
+.el-menu-item:hover {
+    background-color: rgba(44,46,56,1) !important;
+    border-left: 3px solid #3c8dbc;
+}
+/* 选中状态背景颜色 */
+.el-menu-item.is-active {
+    background-color: #3c8dbc !important;
+}
+
+/* 导航条样式 */
+.el-tabs__nav {
+    margin: 0;
+}
+.el-tabs__nav-prev {
+    margin-right: 20px;
+    /* width: 50px; */
+    height: 40px;
+}
+.el-tabs__nav-next {
+    margin-left: 20px;
+    height: 40px; 
+}
+.el-tabs__nav-prev i,.el-tabs__nav-next i{
+    font-size: 20px;
+}
+.el-tabs--border-card {
+    height: 100%;
+    background-color: #f4f4f4;
+    border: 0;
+}
+.el-tabs__header {
+    padding:0 40px 0 0;
+}
+.el-tabs--border-card>.el-tabs__content {
+    padding: 15px;
+}
+.el-tabs--border-card>.el-tabs__header {
+    background-color: #fff;
+}
+/* 未选中标签页样式 */
+.el-tabs--border-card>.el-tabs__header .el-tabs__item {
+    padding: 0 !important;
+    background-color: #fff;
+    border: 1px solid rgba(238,238,238,1);
+}
+/* 选中标签页样式 */
+.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active{
+    padding: 0 !important;
+    color: black;
+    background-color: rgba(238,238,238,1);
+    border-bottom: 1px solid #3483b0;
+}
+.el-tabs--border-card>.el-tabs__content {
+    flex: 1;
+    background-color: #f4f4f4;
+}
+.el-main .el-icon-close:before {
+    padding: 5px;
+}
+/* 组件内容部分样式 */
+.content {
+    width: 1682.1px;
+    height: 100%;
+    background-color: #f4f4f4;
+}
+.el-table {
+    margin-top: 19px;
+}
+.el-table th {
+    background-color: #F8F8F8;
+}
+.el-table th>.cell {
+    font-family:MicrosoftYaHeiLight;
+    font-weight:bold;
+    color:rgba(102,102,102,1);
+}

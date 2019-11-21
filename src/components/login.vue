@@ -1,0 +1,227 @@
+<template>
+    <!-- 登陆页面 -->
+    <div class="login_container">
+        <!-- 登陆页面头部 -->
+        <div class="login_header">
+            <h1>
+                <a href="javascript:;">
+                    <span>众力</span>供应链管理系统
+                </a>
+            </h1>
+            <p>欢迎您登陆</p>
+        </div>
+        <!-- 登陆页面中间部分(包括登陆框) -->
+        <div class="login_body">
+            <div class="login_box">
+                <!-- 标签页切换 -->
+                <div class="tabs">
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="手机登陆" name="first">
+                            <!-- 手机登陆表单 -->
+                            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >
+                                <el-form-item prop="username">
+                                    <el-input v-model="ruleForm.username" placeholder="请输入手机号码" type="text" prefix-icon="el-icon-mobile-phone" clearable></el-input>
+                                </el-form-item>
+                                <el-form-item prop="password">
+                                    <el-input v-model="ruleForm.password" placeholder="请输入登陆密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="submitForm('ruleForm')">登陆</el-button>
+                                </el-form-item>
+                                <div class="form_layout">
+                                    <el-checkbox v-model="ruleForm.choose">记住登陆状态</el-checkbox>
+                                    <el-link href="http://localhost:8080/#/register" type="primary" :underline="false">注册新用户</el-link>
+                                    <el-link href="http://localhost:8080/#/resetPassword" type="primary" :underline="false">忘记密码?</el-link>
+                                </div>
+                            </el-form>
+                        </el-tab-pane>
+                        <el-tab-pane label="邮箱登陆" name="second">
+                            <!-- 邮箱登陆表单 -->
+                            <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >
+                                <el-form-item prop="username">
+                                    <el-input v-model="ruleForm.email" placeholder="请输入登陆邮箱"  prefix-icon="el-icon-search" clearable></el-input>
+                                </el-form-item>
+                                <el-form-item prop="password">
+                                    <el-input v-model="ruleForm.password" placeholder="请输入登陆密码"  prefix-icon="el-icon-search" clearable></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="submitForm('ruleForm')">登陆</el-button>
+                                </el-form-item>
+                            </el-form>
+                            <div class="form_layout">
+                                <el-checkbox v-model="ruleForm.choose">记住登陆状态</el-checkbox>
+                                <el-link href="http://localhost:8080/#/register" type="primary" :underline="false">注册新用户</el-link>
+                                <el-link href="http://localhost:8080/#/resetPassword" type="primary" :underline="false">忘记密码?</el-link>
+                            </div> -->
+                        </el-tab-pane>
+                    </el-tabs>
+                </div>
+            </div>
+        </div>
+        <!-- 登陆页面尾部 -->
+        <div class="login_footer" :style="{'height': actionHeight+'px'}">
+            <span>
+                <a href="javascript:;">网站首页</a> |
+                <a href="javascript:;">帮助中心</a> |
+                <a href="javascript:;">联系我们</a> |
+                <a href="javascript:;">招聘信息</a> |
+                <a href="javascript:;">客户服务</a> |
+                <a href="javascript:;">隐私政策</a> |
+                <a href="javascript:;">广告服务</a> |
+                <a href="javascript:;">网站地图</a> |
+                <a href="javascript:;">意见反馈</a>
+            </span>
+            <p>众力供应链 版权所有©️2019</p>
+        </div>
+    </div>
+</template>
+<script>
+import { loginApi } from '@/api'
+export default {
+  data() {
+    return {
+      // 动态获取底部盒子高度
+      actionHeight: 220,
+      // 登陆框默认选中
+      activeName: 'first',
+      // 表单数据
+      ruleForm: {
+        username: '',
+        password: '',
+        // 记住登陆状态勾选状态
+        choose: false
+      },
+      // 登陆框校验
+      rules: {
+        username: [
+          { required: true, message: '请输入手机号码', trigger: 'blur' },
+          { pattern: /^1[34578]\d{9}$/, message: '请输入正确格式的手机号码' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        //   { pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$/, message: '密码格式不正确' }
+        ]
+      }
+    }
+  },
+  created() {
+    this.actionHeight = window.innerHeight - 800
+    console.log(this.actionHeight)
+  },
+  methods: {
+    format(percentage) {
+      return percentage === 100 ? '满' : `${percentage}%`
+    },
+    handleClick(tab, event) {
+      console.log(tab, event)
+    },
+    // 登陆校验及调用登录接口
+    submitForm(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (!valid) return false
+        const { data: res } = await loginApi(this.ruleForm)
+        if (res.code !== 0) return this.$message.error('您输入的账号或者密码不正确')
+        window.sessionStorage.setItem('code', res.code)
+        this.$router.push('/home')
+      })
+    }
+  }
+}
+</script>
+<style scoped lang='less'>
+.login_container {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+.login_header {
+    position: relative;
+    width: 100%;
+    height: 100px;
+}
+.login_header h1 {
+    position: absolute;
+    width: 370px;
+    height: 100px;
+}
+.login_header h1 a {
+    margin: 0 60px;
+    line-height: 100px;
+    font-size: 26px;
+    font-weight: 400;
+    color: #000;
+}
+.login_header h1 a span {
+    color: #e92020;
+}
+.login_header p {
+    position: absolute;
+    right: 105px;
+    line-height: 100px;
+    font-size: 20px;
+    color: #848484;
+    cursor: default;
+}
+
+.login_body {
+    position: relative;
+    height: 700px;
+    background-color: #000;
+}
+.login_box {
+    position: absolute;
+    top: 50%;
+    right: 18%;
+    height: 510px;
+    width: 430px;
+    background-color: pink;
+    border-radius: 8px;
+    transform: translate(0,-50%)
+}
+.login_box .tabs {
+    box-sizing: border-box;
+    padding: 20px 40px;
+    height: 360px;
+    width: 430px;
+    border-radius: 8px;
+    background-color:#fff;
+}
+.el-form-item {
+    height: 50px;
+}
+.el-checkbox {
+    color: #747474;
+}
+
+.el-button {
+    width: 100%;
+    height: 100%;
+}
+.form_layout {
+    display: flex;
+}
+.form_layout .el-checkbox {
+    flex: 2;
+}
+.form_layout .el-link {
+    flex: 1;
+}
+
+.login_footer span {
+    position: absolute;
+    top: 820px;
+    left: 50%;
+    width: 650px;
+    height: 20px;
+    font-size: 14px;
+    transform: translate(-50%);
+}
+.login_footer p {
+    position: absolute;
+    top: 854px;
+    left: 50%;
+    height: 20px;
+    font-size: 14px;
+    transform: translate(-50%);
+}
+</style>
