@@ -17,7 +17,7 @@ ul {
     padding: 0;
 }
 body {
-    min-width:1900px;
+    min-width:1200px;
 	/* overflow:auto; */
 }
 a {
@@ -72,7 +72,7 @@ div {
 /* 注册页面 */
 /* 弹出框样式 */
 .el-dialog {
-    width: 700px !important;
+    width: 700px;
     height: 600px;
     border: 0;
     border-radius: 6px;
@@ -105,6 +105,40 @@ div {
 .el-dialog__footer .el-button {
     margin: 0 30px;
     width: 80px;
+}
+/* home界面修改密码弹出框 */
+.home_contaner .el-dialog {
+    width: 489px;
+    height: 446px;
+    font-size:14px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    line-height:60px;
+}
+.home_contaner .el-form-item__content {
+    position: relative;
+    padding-left: 80px;
+}
+.home_contaner .el-form-item p {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40px;
+    width: 70px;
+    text-align: right;
+}
+.home_contaner .el-form-item .el-form-item__error {
+    padding-left: 82px;
+}
+.home_contaner .el-header .el-input {
+    width: 328px;
+}
+.home_contaner .el-dialog__body {
+    height: 308px;
+}
+.home_contaner .el-form-item__content a {
+    color: #409EFF;
 }
 /* home页面 */
 .home_contaner .el-header {

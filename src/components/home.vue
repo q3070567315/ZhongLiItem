@@ -24,7 +24,13 @@
                         <span>{{item.name}}</span>
                     </template>
                     <!-- 二级菜单 -->
-                    <el-menu-item></el-menu-item>
+                    <el-menu-item :index="'/'+subItem.menuId" v-for="subItem in item.children" :key="subItem.id">
+                            <template slot="title">
+                            <!-- 图标 -->
+                            <i :class="subItem.icon"></i>
+                            <span>{{subItem.name}}</span>
+                            </template>
+                    </el-menu-item>
                 </el-submenu>
             </el-menu>
             <!-- 导航菜单end -->
@@ -46,7 +52,7 @@
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <a @click="personRouter()"><el-dropdown-item>个人中心</el-dropdown-item></a>
-                            <el-dropdown-item>密码修改</el-dropdown-item>
+                            <a @click="dialogVisible = true"><el-dropdown-item>密码修改</el-dropdown-item></a>
                             <a @click="logout"><el-dropdown-item>退出登录</el-dropdown-item></a>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -112,13 +118,85 @@
                 </div>
             </el-footer>
         </el-container>
+        <!-- 修改密码弹出框 -->
+        <template id="changePasswordBox">
+          <div>
+            <el-dialog
+              title="修改密码"
+              :visible.sync="dialogVisible">
+                <!-- 注册表单 -->
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+                    <el-form-item prop="password">
+                        <p>新密码: </p><el-input v-model="ruleForm.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="checkPassword">
+                        <p>再次确认: </p><el-input v-model="ruleForm.checkPassword" placeholder="请再次输入登陆密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item prop="mobile">
+                        <p>绑定手机: </p><a>130****21551</a>
+                    </el-form-item>
+                    <el-form-item prop="code" class="el_form_item_shortMsg">
+                        <p>验证码: </p><el-input v-model="ruleForm.code" name="shortMsg" placeholder="请输入短信验证码" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-button @click="sendVerification('ruleForm')" ref="sendVeri" :disabled="controlBtn">发送验证码</el-button>
+                    </el-form-item>
+                </el-form>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="changePassword">修改</el-button>
+              </span>
+            </el-dialog>
+          </div>
+        </template>
     </div>
 </template>
 <script>
-import { logoutApi, getMenuListApi } from '@/api'
+import { logoutApi, getMenuListApi, sendVerificationApi } from '@/api'
 export default {
   data() {
+    // 部分校验(密码校验)
+    let validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.ruleForm.checkPassword !== '') {
+          this.$refs.ruleForm.validateField('checkPassword')
+        }
+        callback()
+      }
+    }
+    let validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.ruleForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
+      // 表单数据
+      ruleForm: {
+        password: '',
+        mobile: null,
+        code: ''
+      },
+      // 登陆框校验
+      rules: {
+        mobile: [
+          { required: false, message: '请输入手机号码', trigger: 'blur' },
+          { pattern: /^1[34578]\d{9}$/, message: '请输入正确格式的手机号码' }
+        ],
+        password: [
+          { required: false, trigger: 'blur' },
+          { pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$/, message: '密码长度应为6~16个字符且包含字母和数字' },
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        checkPassword: [
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      },
+      // 控制验证码按钮的禁用状态
+      controlBtn: false,
       // 控制侧边栏的显示和隐藏
       isCollapse: false,
       // 控制标签页的当前下标
@@ -127,7 +205,9 @@ export default {
       editableTabs: [],
       tabIndex: 2,
       // 左侧菜单栏列表
-      menulist: []
+      menulist: [],
+      // 控制是否弹出修改密码框
+      dialogVisible: false
     }
   },
   created() {
@@ -142,6 +222,10 @@ export default {
     personRouter() {
       this.$router.push('/personalCenter')
       this.addTab(this.editableTabsValue, '个人中心', '/personalCenter')
+    },
+    // 修改密码功能
+    changePassword() {
+      this.dialogVisible = false
     },
     // 添加标签页
     addTab(targetName, title, url) {
@@ -178,9 +262,6 @@ export default {
     closeOnePage() {
       const lastPage = this.editableTabs[this.editableTabs.length - 1]
       this.removeTab(lastPage.name)
-    //   this.editableTabs.forEach((item) => {
-    //     console.log(item.name)
-    //   })
     },
     // 导航栏下拉关闭其他页面
     closeOtherPage() {
@@ -202,10 +283,60 @@ export default {
       window.sessionStorage.removeItem('code')
       this.$router.push('/login')
     },
+    // 获取左侧列表菜单
     async getMenuList() {
       const { data: res } = await getMenuListApi()
-      this.menulist = res.data.menuList
+      let data1 = res.data.menuList
+      // 左侧菜单数据修改为树形结构
+      function setTreeData(arr) {
+        let map = {}
+        arr.forEach(i => {
+          map[i.menuId] = i
+        })
+        let treeData = []
+        arr.forEach(child => {
+          const mapItem = map[child.parentId]
+          if (mapItem) {
+            (mapItem.children || (mapItem.children = [])).push(child)
+          } else {
+            treeData.push(child)
+          }
+        })
+        return treeData
+      }
+      this.menulist = setTreeData(data1)
       console.log(this.menulist)
+    },
+    // 发送验证码
+    sendVerification(formName) {
+      // 校验手机号格式是否正确
+      this.$refs[formName].validateField('mobile', async mobileError => {
+        if (!mobileError) {
+          const { data: res } = await sendVerificationApi({ type: 1, mobile: this.ruleForm.mobile })
+          if (res.code !== 0) return this.$message.error('发送验证码失败!')
+          this.$message.success('验证码发送成功!')
+          console.log(res)
+          // 获取验证码按钮元素(实现验证码倒计时功能)
+          var sendBtn = this.$refs.sendVeri.$el
+          let num = 60
+          var that = this
+          let timer = setInterval(function () {
+            num--
+            that.controlBtn = true
+            sendBtn.innerHTML = num + '秒后重新获取'
+            sendBtn.style.color = '#ccc'
+            if (num === 0) {
+              that.controlBtn = false
+              sendBtn.style.color = '#ffa600'
+              sendBtn.innerHTML = '发送验证码'
+              clearInterval(timer)
+            }
+          }, 1000)
+        } else {
+          this.$message.error('请填入正确的手机号')
+          return false
+        }
+      })
     }
   }
 }
@@ -307,13 +438,20 @@ export default {
     height: 30px;
     border-radius: 50%;
 }
+.el_form_item_shortMsg .el-button {
+    position: absolute;
+    padding: 12px 0;
+    right: 40px;
+    width: 30%;
+    text-align: center;
+}
+
 .el-main .el-tabs span {
     display: inline-block;
     text-align: center;
     padding: 0 0 0 15px;
     height: 100%;
 }
-
 .el-main .el-tabs:nth-child(1) .el-tabs__item:nth-child(1)  span {
     padding: 0 20px;
 }

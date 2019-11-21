@@ -8,7 +8,7 @@ import Index from './components/index.vue'
 import PersonalCenter from './components/personalCenter/personalCenter.vue'
 import PurchaseOrder from './components/CollProcurement/purchaseOrder.vue'
 import OnlineConfirmation from './components/CollProcurement/onlineConfirmation.vue'
-
+import InvoiceInforConfirm from './components/CollProcurement/invoiceInforConfirm.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -50,6 +50,11 @@ const router = new Router({
     {
       path: '/onlineConfirmation',
       component: OnlineConfirmation
+    },
+    // 发票信息确认
+    {
+      path: '/invoiceInforConfirm',
+      component: InvoiceInforConfirm
     }
     ]
   }

@@ -5,7 +5,7 @@
             <h2>
                 <span>众力</span>供应链管理系统<i>忘记密码</i>
             </h2>
-            <p><a href="#">去登陆></a></p>
+            <p><a @click="routerJump">去登陆></a></p>
         </div>
         <!-- 找回密码页面表单 -->
         <div class="resetPassword_box">
@@ -31,21 +31,21 @@
                 <!-- 2.设置新密码 -->
                 <el-form :model="ruleForm2" :rules="rules" ref="ruleForm2" style="display:none;">
                     <el-form-item prop="password">
-                        <el-input v-model="ruleForm.password" placeholder="设置六至二十位登录密码"  prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm2.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
                     </el-form-item>
-                    <el-form-item prop="password">
-                        <el-input v-model="ruleForm.password" placeholder="请再次输入登陆密码"  prefix-icon="el-icon-search" clearable></el-input>
+                    <el-form-item prop="checkPassword">
+                        <el-input v-model="ruleForm2.checkPassword" placeholder="请再次输入登陆密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm2('ruleForm2')">下一步</el-button>
                     </el-form-item>
                 </el-form>
                 <!-- 3.修改密码成功 -->
-                <div class="resetPassword_box_success" style="display: none;">
+                <div class="resetPassword_box_success" style="display: none;" ref="resetSuccess">
                     <img src="../assets/img/registerSuccess.jpg" alt="密码重置成功">
                     <p>重置密码成功</p>
                     <span>请妥善保管您的账号信息</span>
-                    <el-button type="primary" plain>重新登录</el-button>
+                    <el-button type="primary" plain  @click="routerJump">重新登录</el-button>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@ export default {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.ruleForm.checkPassword !== '') {
+        if (this.ruleForm2.checkPassword !== '') {
           this.$refs.ruleForm.validateField('checkPassword')
         }
         callback()
@@ -69,7 +69,7 @@ export default {
     let validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.ruleForm.password) {
+      } else if (value !== this.ruleForm2.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
@@ -78,10 +78,12 @@ export default {
     return {
       // 表单数据
       ruleForm: {
-        mobile: null,
+        mobile: '',
         code: ''
       },
       ruleForm2: {
+        mobile: '',
+        code: '',
         password: ''
       },
       // 登陆框校验
@@ -147,7 +149,8 @@ export default {
         if (!valid) return false
         const { data: res } = await checkShortMsgApi(this.ruleForm)
         if (res.code !== 0) return this.$message.error(res.msg)
-        console.log(res)
+        this.ruleForm2.mobile = this.ruleForm.mobile
+        this.ruleForm2.code = this.ruleForm.code
         this.controlActive = 2
         let firstFormEl = this.$refs.ruleForm.$el
         let seconedFormEl = this.$refs.ruleForm2.$el
@@ -159,12 +162,14 @@ export default {
     submitForm2(formName) {
       this.$refs[formName].validate(async valid => {
         if (!valid) return false
-        const { data: res } = await changePasswordApi(this.ruleForm)
+        const { data: res } = await changePasswordApi(this.ruleForm2)
         if (res.code !== 0) return this.$message.error(res.msg)
-        console.log(res)
         this.controlActive = 3
         let seconedFormEl = this.$refs.ruleForm2.$el
+        let thirdEl = this.$refs.resetSuccess
+        console.log(thirdEl)
         seconedFormEl.style.display = 'none'
+        thirdEl.style.display = 'block'
       })
     }
   }
@@ -210,6 +215,7 @@ export default {
 }
 .resetPassword_header p a {
     color: #0079fe;
+    cursor: pointer;
 }
 
 .resetPassword_box {
@@ -260,7 +266,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     position: absolute;
-    top: 120px;
+    top: 150px;
     left: 50%;
     width: 212px;
     height: 340px;
@@ -283,6 +289,6 @@ export default {
     color: #bfbfbf;
 }
 .resetPassword_box_success .el-button {
-    margin: 0 40px;
+    margin: 0 57px;
 }
 </style>
