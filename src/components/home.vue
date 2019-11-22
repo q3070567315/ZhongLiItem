@@ -5,26 +5,15 @@
             <div class="logo"><i>LOGO</i> SRM系统</div>
             <!-- 导航菜单start -->
             <el-menu default-active="1-4-1" class="el-menu-vertical-demo" background-color="#24262F" text-color="#fff" unique-opened active-text-color="#fff" :collapse="isCollapse">
-                <!-- <el-submenu index="1">
-                    <template slot="title">
-                    <i class="el-icon-location"></i>
-                    <span slot="title">采购协同</span>
-                    </template>
-                    <el-menu-item-group>
-                    <el-menu-item index="1-1">采购订单</el-menu-item>
-                    <el-menu-item index="1-2">在线收货确认</el-menu-item>
-                    <el-menu-item index="1-3">发票信息确认</el-menu-item>
-                    </el-menu-item-group>
-                </el-submenu> -->
                 <!-- 一级菜单 -->
-                <el-submenu :index="item.menuId + ''" v-for="item in menulist" :key="item.menuId">
+                <el-submenu :index="item.menuId + ''" v-for="item in navMenu" :key="item.menuId">
                     <template slot="title">
                         <!-- 图标 -->
                         <i :class="item.icon"></i>
                         <span>{{item.name}}</span>
                     </template>
                     <!-- 二级菜单 -->
-                    <el-menu-item :index="'/'+subItem.menuId" v-for="subItem in item.children" :key="subItem.id">
+                    <el-menu-item :index="'/'+subItem.menuId" v-for="subItem in item.list" :key="subItem.menuId">
                             <template slot="title">
                             <!-- 图标 -->
                             <i :class="subItem.icon"></i>
@@ -100,19 +89,19 @@
                 </div>
                 <div class="footer_right">
                     <a href="javascript:;">
-                        <img src="../assets/img/defaultHead.jpg"/>
+                        <i class="iconfont icon-WeChat"></i>
                         <p>公众号</p>
                     </a>
                     <a href="javascript:;">
-                        <img src="../assets/img/defaultHead.jpg"/>
+                        <i class="iconfont icon-weibo"></i>
                         <p>微博</p>
                     </a>
                     <a href="javascript:;">
-                        <img src="../assets/img/defaultHead.jpg"/>
+                        <i class="iconfont icon-shouji"></i>
                         <p>400-888-888</p>
                     </a>
                     <a href="javascript:;">
-                        <img src="../assets/img/defaultHead.jpg"/>
+                        <i class="iconfont icon-youjian"></i>
                         <p>发送邮件</p>
                     </a>
                 </div>
@@ -150,7 +139,7 @@
     </div>
 </template>
 <script>
-import { logoutApi, getMenuListApi, sendVerificationApi } from '@/api'
+import { logoutApi, getNavMenuApi, sendVerificationApi } from '@/api'
 export default {
   data() {
     // 部分校验(密码校验)
@@ -204,14 +193,14 @@ export default {
       // 标签页渲染数组
       editableTabs: [],
       tabIndex: 2,
-      // 左侧菜单栏列表
-      menulist: [],
+      // 左侧导航菜单
+      navMenu: [],
       // 控制是否弹出修改密码框
       dialogVisible: false
     }
   },
   created() {
-    this.getMenuList()
+    this.getNavMenu()
   },
   methods: {
     // 隐藏侧边栏
@@ -283,29 +272,11 @@ export default {
       window.sessionStorage.removeItem('code')
       this.$router.push('/login')
     },
-    // 获取左侧列表菜单
-    async getMenuList() {
-      const { data: res } = await getMenuListApi()
-      let data1 = res.data.menuList
-      // 左侧菜单数据修改为树形结构
-      function setTreeData(arr) {
-        let map = {}
-        arr.forEach(i => {
-          map[i.menuId] = i
-        })
-        let treeData = []
-        arr.forEach(child => {
-          const mapItem = map[child.parentId]
-          if (mapItem) {
-            (mapItem.children || (mapItem.children = [])).push(child)
-          } else {
-            treeData.push(child)
-          }
-        })
-        return treeData
-      }
-      this.menulist = setTreeData(data1)
-      console.log(this.menulist)
+    // 获取左侧导航菜单
+    async getNavMenu() {
+      const { data: res } = await getNavMenuApi()
+      // console.log(res.data.menuList)
+      this.navMenu = res.data.menuList
     },
     // 发送验证码
     sendVerification(formName) {
@@ -501,10 +472,13 @@ export default {
     align-items: center;
     width: 100px;
 }
-.footer_right>a img {
-    width: 40px;
-    height: 30px;
+.footer_right>a i {
+    font-size: 30px;
     margin: 5px 10px;
+    color: #959595;
+}
+.footer_right>a:nth-child(1) i {
+    color: #86C610;
 }
 .footer_right>a p {
     white-space:nowrap;

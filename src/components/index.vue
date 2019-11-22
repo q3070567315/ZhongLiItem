@@ -3,34 +3,34 @@
       <!-- 后台内容首页四个管理框 -->
       <section>
         <div>
-          <p><i class="el-icon-menu"></i>询比价项目管理</p>
+          <p><i class="iconfont icon-lubiao01"></i>询比价项目管理</p>
           <ul>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>新建</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>待发布</p>
                 <span>8</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>进行中</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>已归档</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>废弃</p>
                 <span>10</span>
               </a>
@@ -38,34 +38,34 @@
           </ul>
         </div>
         <div>
-          <p><i class="el-icon-menu"></i>竞价项目管理</p>
+          <p><i class="iconfont icon-jingjia"></i>竞价项目管理</p>
           <ul>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>新建</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>待发布</p>
                 <span>8</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>进行中</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>已归档</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>废弃</p>
                 <span>10</span>
               </a>
@@ -75,22 +75,22 @@
       </section>
       <section>
         <div>
-          <p><i class="el-icon-menu"></i>招标申请管理</p>
+          <p><i class="iconfont icon-icon-paper"></i>招标申请管理</p>
           <ul>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>新建</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>审批</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>列表</p>
                 <span>10</span>
               </a>
@@ -98,40 +98,40 @@
           </ul>
         </div>
         <div>
-          <p><i class="el-icon-menu"></i>招标项目管理</p>
+          <p><i class="iconfont icon-suoyouzhaobiaoxiangmu"></i>招标项目管理</p>
           <ul>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>新建</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>待发布</p>
                 <span>8</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>评标专家抽取</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>正在投标</p>
                 <span>10</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>代授权</p>
                 <span>264</span>
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="javascript:;">
                 <p>已归档</p>
                 <span>10</span>
               </a>

@@ -1,30 +1,27 @@
 // 菜单管理
 <template>
-    <div class="content">
+    <div class="menuManage_contaner">
       <!-- 卡片视图区 -->
       <el-card>
         <!-- 菜单管理表格区 -->
         <el-row>
-            <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}">
-              <el-table-column type="selection" width="40" label="订单"></el-table-column>
-              <el-table-column prop="name" label="订单号" width="138"></el-table-column>
-              <el-table-column prop="date" label="订单日期" sortable width="220"></el-table-column>
-              <el-table-column prop="" label="采购员" sortable width="140"></el-table-column>
-              <el-table-column prop="" label="供应商" sortable width="140"></el-table-column>
-              <el-table-column prop="" label="物料编号" sortable width="150"></el-table-column>
-              <el-table-column prop="" label="物料名称" sortable width="211"></el-table-column>
-              <el-table-column prop="" label="采购数量" sortable width="110"></el-table-column>
-              <el-table-column prop="" label="单位" width="60"></el-table-column>
-              <el-table-column prop="" label="交期" width="130"></el-table-column>
-              <el-table-column prop="" label="状态" width="130"></el-table-column>
-              <el-table-column prop="" label="操作" width="90"></el-table-column>
+            <el-table ref="multipleTable" :data="allMenuData" border style="width: 100%" row-key="menuId" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+              <el-table-column type="selection" width="40"></el-table-column>
+              <el-table-column prop="name" label="菜单名称" width="180"></el-table-column>
+              <el-table-column prop="menuId" label="菜单id" sortable width="110"></el-table-column>
+              <el-table-column prop="parentName" label="父级菜单" sortable width="180"></el-table-column>
+              <el-table-column prop="icon" label="图标" sortable width="249"></el-table-column>
+              <el-table-column prop="type" label="类型" sortable width="80"></el-table-column>
+              <el-table-column prop="orderNum" label="排序编号" sortable width="110"></el-table-column>
+              <el-table-column prop="url" label="菜单链接url" sortable width="350"></el-table-column>
+              <el-table-column prop="perms" label="授权编码" width="260"></el-table-column>
             </el-table>
         </el-row>
         <el-row class="layout_row">
           <!-- 操作按钮 -->
-          <el-button class="examine_btn">新增</el-button>
-          <el-button class="examine_btn">修改</el-button>
-          <el-button class="examine_btn">删除</el-button>
+          <el-button type="primary" class="examine_btn" @click="dialogVisible = true">新增</el-button>
+          <el-button type="primary" class="examine_btn">修改</el-button>
+          <el-button type="danger" class="examine_btn">删除</el-button>
           <!-- 分页功能 -->
           <el-pagination
             layout="total, prev, pager, next, jumper"
@@ -32,44 +29,106 @@
           </el-pagination>
         </el-row>
       </el-card>
+      <template id="newMenu">
+        <div>
+          <el-dialog title="新增" :visible.sync="dialogVisible" width="30%">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+              <el-form-item prop="type">
+                  <p>类型:</p>
+                  <el-radio-group v-model="ruleForm.type" @change="radiosChange">
+                    <el-radio :label="0">目录</el-radio>
+                    <el-radio :label="1">菜单</el-radio>
+                  </el-radio-group>
+              </el-form-item>
+              <el-form-item prop="name">
+                  <p>菜单名称: </p><el-input v-model="ruleForm.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item prop="parentId" ref="parentId" style="display: none">
+                  <p>父级菜单id: </p><el-input v-model="ruleForm.parentId" placeholder="请输入父级菜单的id" type="text" prefix-icon="el-icon-search" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop="url">
+                  <p>菜单跳转url: </p><el-input v-model="ruleForm.url" placeholder="菜单跳转url" type="text" prefix-icon="el-icon-search" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop="orderNum">
+                  <p>排序编号: </p><el-input v-model="ruleForm.orderNum" placeholder="请输入排序编号" type="text" prefix-icon="el-icon-search" clearable></el-input>
+              </el-form-item>
+              <el-form-item prop="icon">
+                  <p>图标: </p><el-input v-model="ruleForm.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
+              </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">返 回</el-button>
+              <el-button type="primary" @click="newMenuItem()">添 加</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </template>
     </div>
 </template>
 <script>
+import { getAllMenuApi, newMenuItemApi } from '@/api'
 export default {
   data() {
     return {
-      tableData: [{
-        id: 1,
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 2,
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        id: 3,
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄',
-        children: [{
-          id: 31,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          id: 32,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }]
-      }, {
-        id: 4,
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      // 表单数据
+      ruleForm: {
+        name: '',
+        icon: '',
+        url: '',
+        type: 0,
+        parentId: 0,
+        orderNum: 1
+      },
+      // 登陆框校验
+      rules: {
+      },
+      // 控制新增菜单的弹出框
+      dialogVisible: false,
+      allMenuData: []
+    }
+  },
+  created() {
+    this.getAllMenu()
+  },
+  methods: {
+    // 获取所有菜单
+    async getAllMenu() {
+      const { data: res } = await getAllMenuApi()
+      let data1 = res.data.menuList
+      // 左侧菜单数据修改为树形结构
+      function setTreeData(arr) {
+        let map = {}
+        arr.forEach(i => {
+          map[i.menuId] = i
+        })
+        let treeData = []
+        arr.forEach(child => {
+          const mapItem = map[child.parentId]
+          if (mapItem) {
+            (mapItem.children || (mapItem.children = [])).push(child)
+          } else {
+            treeData.push(child)
+          }
+        })
+        return treeData
+      }
+      this.allMenuData = setTreeData(data1)
+      console.log(this.allMenuData)
+    },
+    // 单选按钮触发事件(新增菜单)
+    radiosChange() {
+      let inputElm = this.$refs.parentId.$el
+      if (this.ruleForm.type === 0) {
+        inputElm.style.display = 'none'
+      } else if (this.ruleForm.type !== 0) {
+        inputElm.style.display = 'block'
+      }
+    },
+    // 新增菜单
+    async newMenuItem() {
+      console.log(this.ruleForm)
+      const { data: res } = await newMenuItemApi(this.ruleForm)
+      console.log(res)
     }
   }
 }
@@ -83,31 +142,19 @@ export default {
 }
 .el-card .el-button {
   width:70px;
- height:40px;
- border-radius: 3px;
- color: #fff;
+  height:40px;
+  border-radius: 3px;
+  color: #fff;
 }
 .el-card .examine_btn {
   margin: 22px 10px 0 0;
   width:80px;
   height:34px;
-  background:rgba(255,255,255,1);
-  border:1px solid rgba(220,220,220,1);
   border-radius:3px;
-  color: #666;
   line-height: 0;
 }
 .el-card .add_btn {
   float: right;
-}
-.el-card .cancelExamine_btn {
-  padding: 12px 0;
-  width:80px;
-  height:34px;
-  background:rgba(255,255,255,1);
-  border-radius:3px;
-  color: #666;
-  line-height: 0;
 }
 .layout_row {
   position: relative;

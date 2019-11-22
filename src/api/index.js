@@ -42,7 +42,17 @@ export const changePasswordApi = params => {
   return axios.post('/sys/user/password', params)
 }
 
+// 获取导航菜单栏
+export const getNavMenuApi = params => {
+  return axios.get('/sys/menu/nav')
+}
+
 // 获取所有菜单
-export const getMenuListApi = params => {
+export const getAllMenuApi = params => {
   return axios.get('/sys/menu/list')
+}
+
+// 新增菜单项
+export const newMenuItemApi = params => {
+  return axios.post('/sys/menu/save', params)
 }

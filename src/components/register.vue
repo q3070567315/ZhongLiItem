@@ -20,33 +20,34 @@
                     <div class="hidden-input"><input type="text" class="form-control"></div>
                     <div class="hidden-input"><input type="password" class="form-control"></div>
                     <el-form-item prop="username">
-                        <el-input v-model="ruleForm.username" placeholder="请输入用户名称"  prefix-icon="el-icon-mobile-phone" autocomplete="off" clearable></el-input>
+                        <el-input v-model="ruleForm.username" placeholder="请输入用户名称"  prefix-icon="iconfont icon-yonghuming" autocomplete="off" clearable></el-input>
                     </el-form-item>
                     <el-form-item prop="mobile">
-                        <el-input v-model="ruleForm.mobile" placeholder="请输入手机号码" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm.mobile" placeholder="请输入手机号码" type="text" prefix-icon="iconfont icon-shouji" clearable></el-input>
                     </el-form-item>
                     <el-form-item prop="code" class="el_form_item_shortMsg">
-                        <el-input v-model="ruleForm.code" name="shortMsg" placeholder="请输入短信验证码" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm.code" name="shortMsg" placeholder="请输入短信验证码" prefix-icon="iconfont icon-duanxinyanzhengma" clearable></el-input>
                         <el-button @click="sendVerification('ruleForm')" ref="sendVeri" :disabled="controlBtn">发送验证码</el-button>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input v-model="ruleForm.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                        <el-input v-model="ruleForm.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="iconfont icon-iconmm" clearable autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item prop="checkPassword">
-                        <el-input v-model="ruleForm.checkPassword" placeholder="请再次输入登陆密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm.checkPassword" placeholder="请再次输入登陆密码" type="password" prefix-icon="iconfont icon-iconmm" clearable></el-input>
                     </el-form-item>
-                    <el-form-item prop="agreement" class="el_form_agree">
-                      <el-checkbox v-model="ruleForm.choose"></el-checkbox>
+                    <el-form-item prop="choose" class="el_form_agree">
+                      <el-checkbox v-model="ruleForm.choose" @click="agreeUserRule('ruleForm')"></el-checkbox>
+                       <!--  -->
                       <span>勾选同意<el-button type="text" @click="dialogVisible = true">《用户服务协议》</el-button></span>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item class="el-form-reg">
                         <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
                     </el-form-item>
                     <p><a @click="routerJump">已有账号,立即登录</a></p>
                 </el-form>
                 <!-- 注册成功 -->
                 <div class="register_box_success" ref="registerSuccess" style="display: none;">
-                    <img src="../assets/img/registerSuccess.jpg" alt="">
+                    <div class="congratulate"><i class="iconfont icon-gou1"></i></div>
                     <p>恭喜您注册成功</p>
                     <span>请妥善保管您的账号信息</span>
                     <el-button type="primary" plain @click="routerJump()">重新登录</el-button>
@@ -147,19 +148,35 @@ export default {
         callback()
       }
     }
+    let validatePass3 = (rule, value, callback) => {
+      if (value === false) {
+        callback(new Error('未同意《用户服务协议》'))
+      } else {
+        callback()
+      }
+    }
     return {
       // 表单数据
       ruleForm: {
         username: '',
         password: '',
-        mobile: null,
-        code: ''
+        mobile: '',
+        code: '',
+        choose: false
       },
       // 登陆框校验
       rules: {
+        username: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { min: 1, max: 50, message: '用户名过长', trigger: 'blur' }
+        ],
         mobile: [
-          { required: false, message: '请输入手机号码', trigger: 'blur' },
+          { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^1[34578]\d{9}$/, message: '请输入正确格式的手机号码' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { pattern: /^\d{4}$/, message: '验证码格式不正确' }
         ],
         password: [
           { required: false, trigger: 'blur' },
@@ -168,6 +185,9 @@ export default {
         ],
         checkPassword: [
           { validator: validatePass2, trigger: 'blur' }
+        ],
+        choose: [
+          { validator: validatePass3, trigger: 'change' }
         ]
       },
       // 控制验证码按钮的禁用状态
@@ -240,6 +260,13 @@ export default {
     agree() {
       this.ruleForm.choose = true
       this.dialogVisible = false
+    },
+    // 同意用户规则
+    agreeUserRule(formName) {
+      console.log(123)
+      this.$refs[formName].validateField('choose', chooseError => {
+        if (!chooseError) return false
+      })
     }
   }
 }
@@ -357,14 +384,25 @@ export default {
     height: 340px;
     transform: translate(-50%)
 }
-.register_box_success img {
+.register_box_success .congratulate {
+  position: relative;
     margin: 30px 56px;
     width: 100PX;
     height: 100px;
+    background-color: #67C23A;
+    border-radius: 50%
+}
+.register_box_success .congratulate i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 67px;
+  color: #fff;
+  transform: translate(-50%, -50%)
 }
 .register_box_success p {
     font-size: 30px;
-    font-size: #666666;
+    font-size: #666;
 }
 .register_box_success span {
     display: block;

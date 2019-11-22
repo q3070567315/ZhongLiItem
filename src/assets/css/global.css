@@ -41,6 +41,10 @@ div {
     -ms-user-select: none;
     user-select: none;
 }
+.el-input__prefix {
+    display: inline-block;
+    width: 24px;
+}
 /* 登陆界面 */
 .login_container .el-tabs__item {
     box-sizing: border-box;
@@ -128,8 +132,34 @@ div {
     width: 70px;
     text-align: right;
 }
+/* 菜单界面弹出框 */
+.menuManage_contaner .el-dialog {
+    height: 500px;
+}
+.menuManage_contaner .el-dialog__body {
+    height: 360px !important;
+    overflow: visible;
+}
+.menuManage_contaner .el-form-item__content {
+    padding-left: 100px;
+}
+.menuManage_contaner .el-form-item p {
+    width: 90px;
+}
+/* 表单校验提示样式 */
+.el-form-item__error {
+    font-weight: 400;
+    font-size: 12px;
+    margin-left: 5px;
+
+}
 .home_contaner .el-form-item .el-form-item__error {
     padding-left: 82px;
+}
+.register_container .el_form_agree .el-form-item__error {
+    position: absolute;
+    top: 10px;
+    left: 220px;
 }
 .home_contaner .el-header .el-input {
     width: 328px;

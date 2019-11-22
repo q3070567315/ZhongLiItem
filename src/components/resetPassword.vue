@@ -18,10 +18,10 @@
                 <!-- 1.验证身份表单 -->
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
                     <el-form-item prop="mobile">
-                        <el-input v-model="ruleForm.mobile" placeholder="请输入手机号码" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm.mobile" placeholder="请输入手机号码" type="text" prefix-icon="iconfont icon-shouji" clearable></el-input>
                     </el-form-item>
                     <el-form-item prop="code" class="el_form_item_shortMsg">
-                        <el-input v-model="ruleForm.code" name="shortMsg" placeholder="请输入短信验证码" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm.code" name="shortMsg" placeholder="请输入短信验证码" prefix-icon="iconfont icon-duanxinyanzhengma" clearable></el-input>
                         <el-button @click="sendVerification('ruleForm')" ref="sendVeri" :disabled="controlBtn">发送验证码</el-button>
                     </el-form-item>
                     <el-form-item>
@@ -31,10 +31,10 @@
                 <!-- 2.设置新密码 -->
                 <el-form :model="ruleForm2" :rules="rules" ref="ruleForm2" style="display:none;">
                     <el-form-item prop="password">
-                        <el-input v-model="ruleForm2.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm2.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="iconfont icon-iconmm" clearable></el-input>
                     </el-form-item>
                     <el-form-item prop="checkPassword">
-                        <el-input v-model="ruleForm2.checkPassword" placeholder="请再次输入登陆密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
+                        <el-input v-model="ruleForm2.checkPassword" placeholder="请再次输入登陆密码" type="password" prefix-icon="iconfont icon-iconmm" clearable></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitForm2('ruleForm2')">下一步</el-button>
@@ -42,7 +42,7 @@
                 </el-form>
                 <!-- 3.修改密码成功 -->
                 <div class="resetPassword_box_success" style="display: none;" ref="resetSuccess">
-                    <img src="../assets/img/registerSuccess.jpg" alt="密码重置成功">
+                    <div class="congratulate"><i class="iconfont icon-gou1"></i></div>
                     <p>重置密码成功</p>
                     <span>请妥善保管您的账号信息</span>
                     <el-button type="primary" plain  @click="routerJump">重新登录</el-button>
@@ -272,10 +272,21 @@ export default {
     height: 340px;
     transform: translate(-50%)
 }
-.resetPassword_box_success img {
+.resetPassword_box_success .congratulate {
+  position: relative;
     margin: 30px 56px;
     width: 100PX;
     height: 100px;
+    background-color: #67C23A;
+    border-radius: 50%
+}
+.resetPassword_box_success .congratulate i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 67px;
+  color: #fff;
+  transform: translate(-50%, -50%)
 }
 .resetPassword_box_success p {
     text-align: center;
