@@ -6,9 +6,12 @@ import ResetPassword from './components/resetPassword.vue'
 import Home from './components/home.vue'
 import Index from './components/index.vue'
 import PersonalCenter from './components/personalCenter/personalCenter.vue'
-import PurchaseOrder from './components/CollProcurement/purchaseOrder.vue'
-import OnlineConfirmation from './components/CollProcurement/onlineConfirmation.vue'
-import InvoiceInforConfirm from './components/CollProcurement/invoiceInforConfirm.vue'
+import PurchaseOrder from './components/collProcurement/purchaseOrder.vue'
+import OnlineConfirmation from './components/collProcurement/onlineConfirmation.vue'
+import InvoiceInforConfirm from './components/collProcurement/invoiceInforConfirm.vue'
+import MatterCategory from './components/matterManage/matterCategory.vue'
+import MatterDefine from './components/matterManage/matterDefine.vue'
+import MenuManage from './components/menuRule/menuManage.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -55,6 +58,21 @@ const router = new Router({
     {
       path: '/invoiceInforConfirm',
       component: InvoiceInforConfirm
+    },
+    // 物料分类
+    {
+      path: '/matterCategory',
+      component: MatterCategory
+    },
+    // 物料定义
+    {
+      path: '/matterDefine',
+      component: MatterDefine
+    },
+    // 菜单管理
+    {
+      path: '/menuManage',
+      component: MenuManage
     }
     ]
   }
