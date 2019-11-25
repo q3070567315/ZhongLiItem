@@ -53,6 +53,21 @@ export const getAllMenuApi = params => {
 }
 
 // 新增菜单项
-export const newMenuItemApi = params => {
+export const addMenuItemApi = params => {
   return axios.post('/sys/menu/save', params)
+}
+
+// 获取菜单详情
+export const getMenuDetailApi = params => {
+  return axios.get('/sys/menu/info?menuId=' + params)
+}
+
+// 修改菜单
+export const editMenuItemApi = params => {
+  return axios.post('/sys/menu/update', params)
+}
+
+// 删除菜单
+export const delMenuItemApi = params => {
+  return axios.post('/sys/menu/delete?menuId=' + params)
 }

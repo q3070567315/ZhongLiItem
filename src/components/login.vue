@@ -23,7 +23,7 @@
                                     <el-input v-model="ruleForm.username" placeholder="请输入手机号码" type="text" prefix-icon="el-icon-mobile-phone" clearable></el-input>
                                 </el-form-item>
                                 <el-form-item prop="password">
-                                    <el-input v-model="ruleForm.password" placeholder="请输入登陆密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
+                                    <el-input v-model="ruleForm.password" placeholder="请输入登陆密码" type="password" prefix-icon="iconfont icon-iconmm" clearable></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="submitForm('ruleForm')">登陆</el-button>

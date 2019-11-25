@@ -240,7 +240,6 @@ export default {
         if (!valid) return false
         const { data: res } = await userRegisterApi(this.ruleForm)
         // 控制注册程序是否生效
-        console.log(res)
         if (res.code !== 0) return this.$message.error(res.msg)
         this.controlActive = 2
         // 表单内容
