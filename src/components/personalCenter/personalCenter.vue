@@ -2,32 +2,41 @@
     <div class="content">
       <article>
         <header>
-          <div class="head_img">
-            <img src="../../assets/img/defaultHead.jpg" alt="">
+          <div class="head_user">
+            <el-upload
+              class="avatar-uploader"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-success="getImgAddress"
+              :show-file-list="false"
+              :limit="1"
+              ref='uploadImg'>
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <img v-else class="avatar-uploader-icon el-icon-plus" src="../../assets/img/defaultHead.jpg">
+            </el-upload>
           </div>
           <div class="info">
-            <div class="name"><span>王铁柱</span>采购专员</div>
-            <p><span>用户名</span>:13567151666<a href="javascript:;">密码修改</a></p>
-            <p><span>上次登录时间</span>:1999年12月21日</p>
+            <div class="name"><span>{{ruleForm.username}}</span>采购专员</div>
+            <p><span>用户名</span>: {{ruleForm.username}}<a href="javascript:;">密码修改</a></p>
+            <p><span>上次登录时间</span>: {{ruleForm.createTime}}</p>
           </div>
         </header>
         <section>
           <div class="base_info"><p>基本信息</p>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="昵称:" prop="name">
-                <el-input v-model="ruleForm.name"></el-input>
+              <el-form-item label="昵称:" prop="nickName">
+                <el-input v-model="ruleForm.nickName"></el-input>
               </el-form-item>
               <el-form-item label="职位:" prop="name">
                 <el-input v-model="ruleForm.name"></el-input>
               </el-form-item>
-              <el-form-item label="绑定邮箱:" prop="name">
-                <span>snoopies@qq.com<a href="javascript:;">修改</a></span>
+              <el-form-item label="绑定邮箱:" prop="email">
+                <el-input v-model="ruleForm.email"></el-input>
               </el-form-item>
               <el-form-item label="绑定手机:" prop="name">
-                <span>130*****5810<a href="javascript:;">修改</a></span>
+                <span>{{ruleForm.mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}}<a href="javascript:;">修改</a></span>
               </el-form-item>
-              <el-form-item label="QQ:" prop="name">
-                <el-input v-model="ruleForm.name"></el-input>
+              <el-form-item label="QQ:" prop="qq">
+                <el-input v-model="ruleForm.qq"></el-input>
               </el-form-item>
               <el-form-item label="微信:" prop="name">
                 <a href="javascript:;">绑定</a>
@@ -60,22 +69,45 @@
     </div>
 </template>
 <script>
+import { getUserInfoApi, uploadHeadImgApi } from '@/api'
 export default {
   data() {
     return {
       ruleForm: {
-        name: '',
-        desc: ''
+        mobile: '',
+        email: '',
+        nickName: '',
+        qq: ''
       },
       rules: {
         name: [
           { required: true, message: '请输入活动名称', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ]
-      }
+      },
+      // 图片地址
+      imageUrl: ''
     }
   },
+  created() {
+    this.getUserInfo()
+  },
   methods: {
+    // 获取用户的个人信息
+    async getUserInfo() {
+      const { data: res } = await getUserInfoApi()
+      this.ruleForm = res.data.user
+      console.log(this.ruleForm)
+    },
+    // 获取图片地址
+    async getImgAddress(file, fileList) {
+      console.log(file)
+      console.log(fileList)
+      // let picData = new FormData()
+      // picData.append('file', this.$refs.uploadImg.submit)
+      const { data: res } = await uploadHeadImgApi(file.raw)
+      console.log(res)
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -106,22 +138,40 @@ header {
   height: 170px;
   overflow: hidden;
 }
-.head_img {
+.head_user {
   margin: 50px 60px 0 54px;
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background-color: pink;
 }
-.head_img img {
+// 用户头像
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+.avatar-uploader-icon {
+  border-radius: 50%;
+  width: 119px;
+  height: 119px;
+}
+.avatar-uploader-icon:hover {
+  border: 1px solid #3C8DBC;
+  font-size: 28px;
+  color: #8c939d;
+  line-height: 120px;
+  text-align: center;
+}
+.avatar {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  display: block;
 }
+
 .info {
   width: 316px;
   height: 170px;
-  // background-color: skyblue;
 }
 .name {
   font-size:14px;
@@ -158,7 +208,6 @@ header {
   font-size:14px;
   color: #000;
   font-weight: 700;
-  // background-color: yellowgreen;
 }
 // 基本表单样式
 .el-form-item span a {

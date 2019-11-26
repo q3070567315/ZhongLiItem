@@ -285,7 +285,14 @@ div {
 /* 表格单选按钮label值隐藏 */
 .el-table .el-radio__label {
     display: none; 
-  }
+}
 .el-table__indent {
     display: none;
+}
+/* 物料管理(物料分类)表单样式 */
+.matter_content .el-table-column a {
+    display: inline-block;
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 16px;
 }

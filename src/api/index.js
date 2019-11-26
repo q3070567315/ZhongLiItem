@@ -47,6 +47,16 @@ export const getNavMenuApi = params => {
   return axios.get('/sys/menu/nav')
 }
 
+// 获取用户自己的详情
+export const getUserInfoApi = params => {
+  return axios.get('/sys/user/curr-info')
+}
+
+// 上传头像图片
+export const uploadHeadImgApi = params => {
+  return axios.post('/sys/common/upload-pic', params)
+}
+
 // 获取所有菜单
 export const getAllMenuApi = params => {
   return axios.get('/sys/menu/list')
@@ -70,4 +80,9 @@ export const editMenuItemApi = params => {
 // 删除菜单
 export const delMenuItemApi = params => {
   return axios.post('/sys/menu/delete?menuId=' + params)
+}
+
+// 物料分类数据
+export const matterDataApi = params => {
+  return axios.get('/sys/product/cate-list')
 }

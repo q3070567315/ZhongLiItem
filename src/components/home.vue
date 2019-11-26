@@ -122,7 +122,7 @@
                         <p>再次确认: </p><el-input v-model="ruleForm.checkPassword" placeholder="请再次输入登陆密码" type="password" prefix-icon="el-icon-search" clearable></el-input>
                     </el-form-item>
                     <el-form-item prop="mobile">
-                        <p>绑定手机: </p><a>130****21551</a>
+                        <p>绑定手机: </p><a>{{ruleForm.mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}}</a>
                     </el-form-item>
                     <el-form-item prop="code" class="el_form_item_shortMsg">
                         <p>验证码: </p><el-input v-model="ruleForm.code" name="shortMsg" placeholder="请输入短信验证码" prefix-icon="el-icon-search" clearable></el-input>
@@ -139,7 +139,7 @@
     </div>
 </template>
 <script>
-import { logoutApi, getNavMenuApi, sendVerificationApi } from '@/api'
+import { logoutApi, getNavMenuApi, sendVerificationApi, getUserInfoApi, changePasswordApi } from '@/api'
 export default {
   data() {
     // 部分校验(密码校验)
@@ -166,7 +166,7 @@ export default {
       // 表单数据
       ruleForm: {
         password: '',
-        mobile: null,
+        mobile: '',
         code: ''
       },
       // 登陆框校验
@@ -201,6 +201,7 @@ export default {
   },
   created() {
     this.getNavMenu()
+    this.getUserInfo()
   },
   methods: {
     // 隐藏侧边栏
@@ -211,10 +212,6 @@ export default {
     personRouter() {
       this.$router.push('/personalCenter')
       this.addTab(this.editableTabsValue, '个人中心', '/personalCenter')
-    },
-    // 修改密码功能
-    changePassword() {
-      this.dialogVisible = false
     },
     // 添加标签页
     addTab(targetName, title, url) {
@@ -267,7 +264,6 @@ export default {
     // 退出登录状态
     async logout() {
       const { data: res } = await logoutApi()
-      console.log(res)
       if (res.code !== 0) return this.$message.error('退出登录失败!')
       window.sessionStorage.removeItem('code')
       this.$router.push('/login')
@@ -275,7 +271,6 @@ export default {
     // 获取左侧导航菜单
     async getNavMenu() {
       const { data: res } = await getNavMenuApi()
-      // console.log(res.data.menuList)
       this.navMenu = res.data.menuList
     },
     // 发送验证码
@@ -308,6 +303,21 @@ export default {
           return false
         }
       })
+    },
+    // 获取用户的个人信息
+    async getUserInfo() {
+      const { data: res } = await getUserInfoApi()
+      this.ruleForm.mobile = res.data.user.mobile
+    },
+    // 修改密码功能
+    async changePassword() {
+      const { data: res } = await changePasswordApi(this.ruleForm)
+      if (res.code !== 0) return this.$message.error('修改密码失败!')
+      this.$message({
+        type: 'success',
+        message: '修改密码成功!'
+      })
+      this.dialogVisible = false
     }
   }
 }

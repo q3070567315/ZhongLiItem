@@ -21,7 +21,12 @@
               <el-table-column prop="menuId" label="菜单id" sortable width="110"></el-table-column>
               <el-table-column prop="parentName" label="父级菜单" sortable width="180"></el-table-column>
               <el-table-column prop="icon" label="图标" sortable width="249"></el-table-column>
-              <el-table-column prop="type" label="类型" sortable width="80"></el-table-column>
+              <el-table-column prop="type" label="类型" sortable width="80">
+                <template slot-scope="scope">
+                  <div class="list" v-if="scope.row.type === 0">目 录</div>
+                  <div class="menu" v-else>菜 单</div>
+                </template>
+              </el-table-column>
               <el-table-column prop="orderNum" label="排序编号" sortable width="110"></el-table-column>
               <el-table-column prop="url" label="菜单链接url" sortable width="350"></el-table-column>
               <el-table-column prop="perms" label="授权编码"></el-table-column>
@@ -41,10 +46,10 @@
                   </el-radio-group>
               </el-form-item>
               <el-form-item prop="name">
-                  <p>菜单名称: </p><el-input v-model="ruleForm.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                  <p>新增菜单名称: </p><el-input v-model="ruleForm.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item prop="parentId" ref="parentId" style="display: none">
-                  <p>父级菜单id: </p><el-input v-model="ruleForm.parentId" placeholder="请输入父级菜单的id" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="ruleForm.parentId"></el-cascader>
               </el-form-item>
               <el-form-item prop="url">
                   <p>菜单跳转url: </p><el-input v-model="ruleForm.url" placeholder="菜单跳转url(没有则不填)" type="text" prefix-icon="el-icon-search" clearable></el-input>
@@ -76,10 +81,10 @@
                   </el-radio-group>
               </el-form-item>
               <el-form-item prop="name">
-                  <p>菜单名称: </p><el-input v-model="menuDetail.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                  <p>修改菜单名称: </p><el-input v-model="menuDetail.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item prop="parentId" ref="parentId2" style="display: none">
-                  <p>父级菜单id: </p><el-input v-model="menuDetail.parentId" placeholder="请输入父级菜单的id" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="menuDetail.parentId"></el-cascader>
               </el-form-item>
               <el-form-item prop="url">
                   <p>菜单跳转url: </p><el-input v-model="menuDetail.url" placeholder="菜单跳转url(没有则不填)" type="text" prefix-icon="el-icon-search" clearable></el-input>
@@ -126,7 +131,15 @@ export default {
       // 单选按钮选中状态menuId值
       radioValue: 0,
       // 当前选中菜单详情数据
-      menuDetail: []
+      menuDetail: [],
+      defaultData: {
+        value: 'menuId',
+        label: 'name',
+        children: null,
+        expandTrigger: 'hover',
+        // 控制级联选择器只选则单个值
+        emitPath: false
+      }
     }
   },
   created() {
@@ -180,6 +193,7 @@ export default {
     },
     // 新增菜单
     async addMenuItem() {
+      console.log(this.ruleForm)
       const { data: res } = await addMenuItemApi(this.ruleForm)
       if (res.code !== 0) return this.$message.error(res.msg)
       this.$message({
@@ -192,6 +206,7 @@ export default {
     },
     // 通过菜单id获取当前菜单信息并渲染到弹出框中
     async getMenuDetail() {
+      if (this.radioValue === 0) return this.$message.error('请选择需要修改的菜单项')
       const { data: res } = await getMenuDetailApi(this.radioValue)
       if (res.code !== 0) return this.$message.error(res.msg)
       this.menuDetail = res.data.menu
@@ -270,5 +285,21 @@ export default {
 .layout_row {
   position: relative;
   margin-top: -20px;
+}
+.el-table .list {
+  width: 59px;
+  background-color:purple;
+  text-align: center;
+  border-radius: 3px;
+  color: #fff;
+  font-weight: 400;
+}
+.el-table .menu {
+  width: 59px;
+  background-color:yellowgreen;
+  text-align: center;
+  border-radius: 3px;
+  color: #fff;
+  font-weight: 400;
 }
 </style>
