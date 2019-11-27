@@ -83,6 +83,11 @@ export const delMenuItemApi = params => {
 }
 
 // 物料分类数据
-export const matterDataApi = params => {
+export const matterCategoryApi = params => {
   return axios.get('/sys/product/cate-list')
+}
+
+// 物料定义数据
+export const matterDefineApi = params => {
+  return axios.get('/sys/product/list', params)
 }

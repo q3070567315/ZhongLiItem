@@ -20,12 +20,12 @@
         <el-row>
             <el-table tooltip-effect="dark" ref="multipleTable" :data="matterData" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}">
               <el-table-column prop="name" label="分类名称" width="438"></el-table-column>
-              <el-table-column prop="id" label="分类编码" sortable width="220"></el-table-column>
+              <el-table-column prop="num" label="分类编码" sortable width="220"></el-table-column>
               <el-table-column prop="" label="说明" sortable width="721"></el-table-column>
               <el-table-column prop="" label="操作" width="180" class="operate">
-                <a class="el-icon-delete-solid"></a>
-                <a class="el-icon-delete-solid"></a>
-                <a class="el-icon-delete-solid"></a>
+                <a class="el-icon-edit-outline"></a>
+                <a class="el-icon-circle-plus-outline"></a>
+                <a class="el-icon-delete"></a>
               </el-table-column>
             </el-table>
         </el-row>
@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-import { matterDataApi } from '@/api'
+import { matterCategoryApi } from '@/api'
 export default {
   data() {
     return {
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     async getMatterList() {
-      const { data: res } = await matterDataApi()
+      const { data: res } = await matterCategoryApi()
       this.matterData = res.data.cateList
       console.log(this.matterData)
     }
@@ -105,6 +105,11 @@ export default {
   right: 0;
 }
 .operate a {
+  cursor: pointer;
+}
+.el-table .cell a {
+  margin-left: 15px;
+  font-size: 18px;
   cursor: pointer;
 }
 </style>

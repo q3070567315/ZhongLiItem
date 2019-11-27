@@ -494,4 +494,20 @@ export default {
     white-space:nowrap;
     color: #fff;
 }
+/* 鼠标经过大导航背景颜色 */
+.el-submenu__title:hover {
+    background-color: rgba(44,46,56,1) !important;
+}
+.home_contaner .el-menu-item {
+    border-left: 3px solid #24262F;
+}
+/* 鼠标经过小导航背景颜色 */
+.home_contaner .el-menu-item:hover {
+    background-color: rgba(44,46,56,1) !important;
+    border-left: 3px solid #3c8dbc;
+}
+/* 选中状态背景颜色 */
+.home_contaner .el-menu-item.is-active {
+    background-color: #3c8dbc !important;
+}
 </style>
