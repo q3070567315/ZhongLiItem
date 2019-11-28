@@ -3,6 +3,7 @@ body,
 h1,
 h2,
 h3,
+h4,
 #app {
     height: 100%;
     width: 100%;
@@ -273,9 +274,21 @@ div {
     display: none;
 }
 /* 物料管理(物料分类)表单样式 */
-.matter_content .el-table-column a {
+.matterCategory_content .el-table-column a {
     display: inline-block;
     width: 16px !important;
     height: 16px !important;
     font-size: 16px;
+}
+.mattterDefine_content .el-table__row .el-table_1_column_2 {
+    padding: 6px 12px !important;
+}
+/* 物料定义表单样式 */
+.mattterDefine_content .el-dialog {
+    width: 800px;
+    height: 800px;
+}
+.mattterDefine_content .el-dialog .el-dialog__body {
+    width: 100%;
+    height: 642px;
 }

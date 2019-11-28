@@ -89,5 +89,5 @@ export const matterCategoryApi = params => {
 
 // 物料定义数据
 export const matterDefineApi = params => {
-  return axios.get('/sys/product/list', params)
+  return axios.get('/sys/product/list?typeId=' + params.typeId + '&name=' + params.name + '&page=' + params.page + '&size=' + params.size + '&status=' + params.status)
 }

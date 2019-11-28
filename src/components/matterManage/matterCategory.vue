@@ -1,6 +1,6 @@
 // 物料分类
 <template>
-    <div class="matter_content">
+    <div class="matterCategory_content">
       <!-- 卡片视图区 -->
       <el-card>
         <!-- 内容搜索区 -->
@@ -52,6 +52,7 @@ export default {
     this.getMatterList()
   },
   methods: {
+    // 获取物料分类数据
     async getMatterList() {
       const { data: res } = await matterCategoryApi()
       this.matterData = res.data.cateList
