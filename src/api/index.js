@@ -52,11 +52,6 @@ export const getUserInfoApi = params => {
   return axios.get('/sys/user/curr-info')
 }
 
-// 上传头像图片
-export const uploadHeadImgApi = params => {
-  return axios.post('/sys/common/upload-pic', params)
-}
-
 // 获取所有菜单
 export const getAllMenuApi = params => {
   return axios.get('/sys/menu/list')

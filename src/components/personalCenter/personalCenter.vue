@@ -5,7 +5,7 @@
           <div class="head_user">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="http://apisrm.soolcool.com/sys/common/upload-pic"
               :on-success="getImgAddress"
               :show-file-list="false"
               :limit="1"
@@ -69,7 +69,7 @@
     </div>
 </template>
 <script>
-import { getUserInfoApi, uploadHeadImgApi } from '@/api'
+import { getUserInfoApi } from '@/api'
 export default {
   data() {
     return {
@@ -99,14 +99,9 @@ export default {
       this.ruleForm = res.data.user
       console.log(this.ruleForm)
     },
-    // 获取图片地址
-    async getImgAddress(file, fileList) {
-      console.log(file)
-      console.log(fileList)
-      // let picData = new FormData()
-      // picData.append('file', this.$refs.uploadImg.submit)
-      const { data: res } = await uploadHeadImgApi(file.raw)
-      console.log(res)
+    // 上传图片成功时获取图片地址
+    getImgAddress(res, file) {
+      this.imageUrl = res.data.url
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

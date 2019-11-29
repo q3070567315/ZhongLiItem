@@ -120,7 +120,6 @@ export default {
           const { data: res } = await sendVerificationApi({ type: 2, mobile: this.ruleForm.mobile })
           if (res.code !== 0) return this.$message.error('发送验证码失败!')
           this.$message.success('验证码发送成功!')
-          console.log(res)
           // 获取验证码按钮元素(实现验证码倒计时功能)
           var sendBtn = this.$refs.sendVeri.$el
           let num = 60
@@ -167,7 +166,6 @@ export default {
         this.controlActive = 3
         let seconedFormEl = this.$refs.ruleForm2.$el
         let thirdEl = this.$refs.resetSuccess
-        console.log(thirdEl)
         seconedFormEl.style.display = 'none'
         thirdEl.style.display = 'block'
       })

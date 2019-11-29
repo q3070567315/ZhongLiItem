@@ -12,6 +12,8 @@ import InvoiceInforConfirm from './components/collProcurement/invoiceInforConfir
 import MatterCategory from './components/matterManage/matterCategory.vue'
 import MatterDefine from './components/matterManage/matterDefine.vue'
 import MenuManage from './components/menuRule/menuManage.vue'
+import Lunzi from './components/lunzi.vue'
+import Lunzi2 from './components/lunzi2.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -73,6 +75,15 @@ const router = new Router({
     {
       path: '/menuManage',
       component: MenuManage
+    },
+    // 轮子
+    {
+      path: '/lunzi',
+      component: Lunzi
+    },
+    {
+      path: '/lunzi2',
+      component: Lunzi2
     }
     ]
   }

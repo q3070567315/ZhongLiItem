@@ -85,15 +85,28 @@
             <section>
               <!-- 商品信息表单 -->
               <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-                  <el-form-item prop="password">
+                  <el-form-item prop="pic">
                     <p>商品图片: </p>
-                  <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                  </el-upload>
+                    <el-upload
+                        class="avatar-uploader"
+                        action="http://apisrm.soolcool.com/sys/common/upload-pic"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :on-remove="handleRemove"
+                        :before-upload="beforeAvatarUpload">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <span v-if="imageUrl" class="el-upload-action" @click.stop="handleRemove()">
+                            <i class="el-icon-delete"></i>
+                        </span>
+                        <i v-else class="el-icon-upload2 avatar-uploader-icon" stop></i>
+                    </el-upload>
                   </el-form-item>
-                  <el-form-item prop="password">
-                      <p>商品全称: </p><el-input v-model="ruleForm.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                  <el-form-item prop="title">
+                    <p>商品全称: </p><el-input v-model="ruleForm.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <p>商品简称</p>
+                    <p>商品编码</p>
                   </el-form-item>
               </el-form>
             </section>
@@ -150,17 +163,12 @@ export default {
       dialogVisible: false,
       // 表单数据
       ruleForm: {
-        password: '',
-        mobile: '',
-        code: ''
       },
       // 登陆框校验
       rules: {
-        mobile: [
-          { required: false, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^1[34578]\d{9}$/, message: '请输入正确格式的手机号码' }
-        ]
-      }
+      },
+      imageUrl: '',
+      files: []
     }
   },
   created() {
@@ -221,6 +229,28 @@ export default {
     // 添加新的商品
     addNewGoods() {
       this.dialogVisible = true
+    },
+    // 移除图片
+    handleRemove() {
+      this.files = []
+      this.imageUrl = ''
+    },
+    // 上传成功回调
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = res.data.url
+      this.files.push(file)
+    },
+    // 上传前格式和图片大小限制
+    beforeAvatarUpload(file) {
+      const type = file.type === 'image/jpeg' || 'image/jpg' || 'image/webp' || 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!type) {
+        this.$message.error('图片格式不正确!(只能包含jpg，png，webp，JPEG)')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 2MB!')
+      }
+      return type && isLt2M
     }
   }
 }
@@ -311,27 +341,50 @@ export default {
   background-color: yellowgreen;
 }
 // 添加框添加图片样式
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
+.avatar-uploader{
+  width: 100PX;
+  height: 100px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  background-color: #eee;
 }
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
+.avatar-uploader-icon{
+  box-sizing: border-box;
   font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
+  color: #b7b7b7;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
   text-align: center;
 }
+.avatar-uploader-icon:hover{
+  border: 1px dashed #b7b7b7;
+  color: #fff;
+  background-color: rgba(0, 0, 0, .3);
+}
 .avatar {
-  width: 178px;
-  height: 178px;
+  position: relative;
+  width: 100px;
+  height: 100px;
   display: block;
+}
+.el-upload-action {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 0;
+  color: #fff;
+  text-align: center;
+  line-height: 100px;
+
+}
+.el-upload-action:hover {
+  font-size: 20px;
+  background-color: #000;
+  background-color: rgba(0, 0, 0, .3)
 }
 </style>

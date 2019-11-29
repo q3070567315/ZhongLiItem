@@ -30,8 +30,8 @@
                                 </el-form-item>
                                 <div class="form_layout">
                                     <el-checkbox v-model="ruleForm.choose">记住登陆状态</el-checkbox>
-                                    <el-link href="http://localhost:8080/#/register" type="primary" :underline="false">注册新用户</el-link>
-                                    <el-link href="http://localhost:8080/#/resetPassword" type="primary" :underline="false">忘记密码?</el-link>
+                                    <el-link @click="routerJump('/register')" type="primary" :underline="false">注册新用户</el-link>
+                                    <el-link @click="routerJump('/resetPassword')" type="primary" :underline="false">忘记密码?</el-link>
                                 </div>
                             </el-form>
                         </el-tab-pane>
@@ -50,15 +50,15 @@
                             </el-form>
                             <div class="form_layout">
                                 <el-checkbox v-model="ruleForm.choose">记住登陆状态</el-checkbox>
-                                <el-link href="http://localhost:8080/#/register" type="primary" :underline="false">注册新用户</el-link>
-                                <el-link href="http://localhost:8080/#/resetPassword" type="primary" :underline="false">忘记密码?</el-link>
+                                <el-link @click="routerJump('/register')" type="primary" :underline="false">注册新用户</el-link>
+                                <el-link @click="routerJump('/resetPassword')" type="primary" :underline="false">忘记密码?</el-link>
                             </div>
                         </el-tab-pane>
                     </el-tabs>
                 </div>
             </div>
         </div>
-        <!-- 特效波形图 -->
+        <!-- 特效波形图
         <div class="bolang">
             <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
                 <defs>
@@ -71,7 +71,7 @@
                     <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
                 </g>
             </svg>
-        </div>
+        </div> -->
         <!-- 登陆页面尾部 -->
         <div class="login_footer" :style="{'height': actionHeight+'px'}">
             <span>
@@ -119,14 +119,14 @@ export default {
   },
   created() {
     this.actionHeight = window.innerHeight - 800
-    console.log(this.actionHeight)
   },
   methods: {
+    // 跳转至登录页面
+    routerJump(path) {
+      this.$router.push(path)
+    },
     format(percentage) {
       return percentage === 100 ? '满' : `${percentage}%`
-    },
-    handleClick(tab, event) {
-      console.log(tab, event)
     },
     // 登陆校验及调用登录接口
     submitForm(formName) {
@@ -187,7 +187,7 @@ export default {
     right: 18%;
     height: 510px;
     width: 430px;
-    background-color: pink;
+    background-color: #fff;
     border-radius: 8px;
     transform: translate(0,-50%);
     z-index: 1;
@@ -240,55 +240,55 @@ export default {
 }
 
 // 特效波形图
-.bolang {
-    position: absolute;
-    top: 661px;
-    width: 100%;
-}
-.waves {
-  position:relative;
-  width: 100%;
-  height:15vh;
-  margin-bottom:-7px;
-  min-height:100px;
-  max-height:150px;
-}
-/* Animation */
+// .bolang {
+//     position: absolute;
+//     top: 661px;
+//     width: 100%;
+// }
+// .waves {
+//   position:relative;
+//   width: 100%;
+//   height:15vh;
+//   margin-bottom:-7px;
+//   min-height:100px;
+//   max-height:150px;
+// }
+// /* Animation */
 
-.parallax > use {
-  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
-}
-.parallax > use:nth-child(1) {
-  animation-delay: -2s;
-  animation-duration: 7s;
-}
-.parallax > use:nth-child(2) {
-  animation-delay: -3s;
-  animation-duration: 10s;
-}
-.parallax > use:nth-child(3) {
-  animation-delay: -4s;
-  animation-duration: 13s;
-}
-.parallax > use:nth-child(4) {
-  animation-delay: -5s;
-  animation-duration: 20s;
-}
-@keyframes move-forever {
-  0% {
-   transform: translate3d(-90px,0,0);
-  }
-  100% {
-    transform: translate3d(85px,0,0);
-  }
-}
-@media (max-width: 768px) {
-  .waves {
-    height:40px;
-    min-height:40px;
-  }
-  .content {
-    height:30vh;
-  }
-}
+// .parallax > use {
+//   animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+// }
+// .parallax > use:nth-child(1) {
+//   animation-delay: -2s;
+//   animation-duration: 7s;
+// }
+// .parallax > use:nth-child(2) {
+//   animation-delay: -3s;
+//   animation-duration: 10s;
+// }
+// .parallax > use:nth-child(3) {
+//   animation-delay: -4s;
+//   animation-duration: 13s;
+// }
+// .parallax > use:nth-child(4) {
+//   animation-delay: -5s;
+//   animation-duration: 20s;
+// }
+// @keyframes move-forever {
+//   0% {
+//    transform: translate3d(-90px,0,0);
+//   }
+//   100% {
+//     transform: translate3d(85px,0,0);
+//   }
+// }
+// @media (max-width: 768px) {
+//   .waves {
+//     height:40px;
+//     min-height:40px;
+//   }
+//   .content {
+//     height:30vh;
+//   }
+// }
 </style>
