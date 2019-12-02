@@ -13,7 +13,7 @@
             <el-button type="primary">查询</el-button>
           </el-col>
           <el-col :span="19">
-            <el-button type="primary" class="add_btn">添加类</el-button>
+            <el-button type="primary" class="add_btn" @click="dialogVisible = true">添加类</el-button>
           </el-col>
         </el-row>
         <!-- 物料分类表格区 -->
@@ -37,15 +37,58 @@
           </el-pagination>
         </el-row>
       </el-card>
+      <!-- 添加商品分类弹出框 -->
+      <template>
+        <div>
+          <el-dialog title="添加分类" :visible.sync="dialogVisible" :close-on-click-modal="false">
+            <section>
+              <!-- 商品信息表单 -->
+              <el-form :model="branchForm" :rules="rules" ref="ruleForm">
+                  <el-form-item prop="title" class="shopFullName">
+                    <p>分类名称: </p><el-input v-model="branchForm.name" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <p>分类编码: </p><el-input v-model="branchForm.code" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <p>父级分类</p><el-cascader :options="matterData" :props="defaultData" clearable v-model="branchForm.parentId" placehoder="请选择父级分类(没有则不填)"></el-cascader>
+                  </el-form-item>
+              </el-form>
+            </section>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+              <el-button type="primary" @click="addNewGoods()">添加</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </template>
     </div>
 </template>
 <script>
-import { matterCategoryApi } from '@/api'
+import { matterCustomApi } from '@/api'
 export default {
   data() {
     return {
       // 物料分类数据
-      matterData: []
+      matterData: [],
+      // 控制商品分类弹出框
+      dialogVisible: false,
+      // 添加分支表单
+      branchForm: {
+        parentId: 0
+      },
+      // 级联选择器分类
+      defaultData: {
+        value: 'id',
+        label: 'name',
+        children: null,
+        expandTrigger: 'hover',
+        // 控制级联选择器只选则单个值
+        emitPath: false
+      },
+      // 添加修改分类框校验
+      rules: {
+      }
     }
   },
   created() {
@@ -54,8 +97,8 @@ export default {
   methods: {
     // 获取物料分类数据
     async getMatterList() {
-      const { data: res } = await matterCategoryApi()
-      this.matterData = res.data.cateList
+      const { data: res } = await matterCustomApi()
+      this.matterData = res.data.typeList
       console.log(this.matterData)
     }
   }

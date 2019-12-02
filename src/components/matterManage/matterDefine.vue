@@ -1,6 +1,6 @@
 //  物料定义
 <template>
-    <div class="mattterDefine_content">
+    <div class="matterDefine_content">
       <!-- 卡片视图区 -->
       <el-card>
         <!-- 锁定选择区 -->
@@ -14,7 +14,7 @@
         <!-- 内容搜索区 -->
         <el-row :gutter="20">
           <el-col :span="3">
-            <el-cascader :options="matterListData" :props="defaultData" clearable  placeholder="选择分类" v-model="matterDefineData.typeId" @change="handleChange"></el-cascader>
+            <el-cascader :options="matterCustomData" :props="defaultData" clearable  placeholder="选择分类" v-model="matterDefineData.typeId" @change="handleChange"></el-cascader>
           </el-col>
           <el-col :span="3">
             <el-input placeholder="商品名称" clearable v-model="matterDefineData.name">
@@ -24,7 +24,7 @@
             <el-button type="primary" @click="matterDefine()">查询</el-button>
           </el-col>
           <el-col :span="16">
-            <el-button type="primary" class="add_btn" @click="addNewGoods()">添加</el-button>
+            <el-button type="primary" class="add_btn" @click="dialogVisible = true">添加</el-button>
           </el-col>
         </el-row>
         <!-- 物料定义表格区 -->
@@ -32,8 +32,10 @@
             <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="40"></el-table-column>
               <el-table-column label="商品图片" width="138">
-                <img v-if="tableData.pic !== ''" src="../../assets/img/defaultHead.jpg">
-                <!-- <img v-else :src="tableData.pic"> -->
+                <template slot-scope="scope">
+                  <img v-if="scope.row.pic !== ''" :src="scope.row.pic">
+                  <img v-else src="../../assets/img/defaultHead.jpg">
+                </template>
               </el-table-column>
               <el-table-column prop="name" label="商品名称" sortable width="220"></el-table-column>
               <el-table-column prop="num" label="商品编码" sortable width="140"></el-table-column>
@@ -49,13 +51,17 @@
               </el-table-column>
               <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
-                  <!-- 未启用 -->
-                  <a v-if="scope.row.status === 1" class="el-icon-edit"></a>
-                  <a v-if="scope.row.status === 1" class="el-icon-lock"></a>
-                  <a v-if="scope.row.status === 1" class="el-icon-delete"></a>
-                  <!-- 启用 -->
-                  <a v-if="scope.row.status === 2" class="el-icon-unlock"></a>
-                  <!-- 停用 -->
+                  <!-- 1.未启用状态 -->
+                  <!-- 修改 -->
+                  <a v-if="scope.row.status === 1" class="el-icon-edit" @click="getShopInfo(scope.row.id)"></a>
+                  <!-- 锁定 -->
+                  <a v-if="scope.row.status === 1" class="el-icon-lock" @click="changeState(scope.row.status,scope.row.id)"></a>
+                  <!-- 删除 -->
+                  <a v-if="scope.row.status === 1" class="el-icon-delete" @click="deleteShop(scope.row.id)"></a>
+                  <!-- 2.启用状态 -->
+                  <!-- 锁定 -->
+                  <a v-if="scope.row.status === 2" class="el-icon-unlock" @click="changeState(scope.row.status,scope.row.id)"></a>
+                  <!-- 3.停用状态 -->
                   <a v-if="scope.row.status === 3">启用</a>
                 </template>
               </el-table-column>
@@ -63,9 +69,7 @@
         </el-row>
         <el-row class="layout_row">
           <!-- 选择按钮 -->
-          <el-button class="examine_btn">选择全部</el-button>
-          <el-button class="cancelExamine_btn">反向选择</el-button>
-          <el-button class="cancelExamine_btn">清除选择</el-button>
+          <el-button class="examine_btn" @click="clearSelection()">清除选择</el-button>
           <el-button class="cancelExamine_btn">删除所选</el-button>
           <!-- 分页功能 -->
           <el-pagination
@@ -80,12 +84,12 @@
       <!-- 添加商品弹出框 -->
       <template>
         <div>
-          <el-dialog title="添加商品" :visible.sync="dialogVisible">
+          <el-dialog title="添加商品" :visible.sync="dialogVisible" :close-on-click-modal="false">
             <h4>商品基本信息</h4>
             <section>
               <!-- 商品信息表单 -->
-              <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-                  <el-form-item prop="pic">
+              <el-form :model="shopForm" :rules="rules" ref="ruleForm">
+                  <el-form-item prop="pic" class="formImg">
                     <p>商品图片: </p>
                     <el-upload
                         class="avatar-uploader"
@@ -94,25 +98,121 @@
                         :on-success="handleAvatarSuccess"
                         :on-remove="handleRemove"
                         :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <span v-if="imageUrl" class="el-upload-action" @click.stop="handleRemove()">
+                        <img v-if="shopForm.pic" :src="shopForm.pic" class="avatar">
+                        <span v-if="shopForm.pic" class="el-upload-action" @click.stop="handleRemove()">
                             <i class="el-icon-delete"></i>
                         </span>
                         <i v-else class="el-icon-upload2 avatar-uploader-icon" stop></i>
                     </el-upload>
                   </el-form-item>
-                  <el-form-item prop="title">
-                    <p>商品全称: </p><el-input v-model="ruleForm.password" placeholder="设置六至二十位登录密码" type="password" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                  <el-form-item prop="title" class="shopFullName">
+                    <p>商品全称: </p><el-input v-model="shopForm.title" clearable autocomplete="off"></el-input>
                   </el-form-item>
-                  <el-form-item>
-                    <p>商品简称</p>
-                    <p>商品编码</p>
-                  </el-form-item>
+                  <div class="layoutBox">
+                    <el-form-item>
+                      <p>商品简称</p><el-input v-model="shopForm.name" clearable autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>商品编码</p><el-input v-model="shopForm.num" clearable autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>商品类目</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopForm.typeId" @change="handleChange"></el-cascader>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>物料分类</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopForm.cateId" @change="handleChange"></el-cascader>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>到期时间</p>
+                      <template>
+                        <div class="block">
+                          <el-date-picker
+                            v-model="shopForm.data"
+                            type="date"
+                            placeholder="选择日期">
+                          </el-date-picker>
+                        </div>
+                      </template>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>商品品牌</p><el-input v-model="shopForm.brand" clearable autocomplete="off"></el-input>
+                    </el-form-item>
+                  </div>
+                  <!-- 导入富文本 -->
+                  <h5>商品详情</h5><quill-editor v-model="shopForm.content" :options="editorOption"></quill-editor>
+                  <h5>包装清单</h5><el-input v-model="shopForm.packages" type="textarea"></el-input>
               </el-form>
             </section>
             <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">修改</el-button>
+              <el-button type="primary" @click="addNewGoods()">添加</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </template>
+      <!-- 修改商品弹出框 -->
+      <template>
+        <div>
+          <el-dialog title="修改商品" :visible.sync="dialogChange" :close-on-click-modal="false">
+            <h4>商品基本信息</h4>
+            <section>
+              <!-- 商品信息表单 -->
+              <el-form :model="shopInfoData" :rules="rules" ref="ruleForm">
+                  <el-form-item prop="pic" class="formImg">
+                    <p>商品图片: </p>
+                    <el-upload
+                        class="avatar-uploader"
+                        action="http://apisrm.soolcool.com/sys/common/upload-pic"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :on-remove="handleRemove"
+                        :before-upload="beforeAvatarUpload">
+                        <img v-if="shopInfoData.pic" :src="shopInfoData.pic" class="avatar">
+                        <span v-if="shopInfoData.pic" class="el-upload-action" @click.stop="handleRemove()">
+                            <i class="el-icon-delete"></i>
+                        </span>
+                        <i v-else class="el-icon-upload2 avatar-uploader-icon" stop></i>
+                    </el-upload>
+                  </el-form-item>
+                  <el-form-item prop="title" class="shopFullName">
+                    <p>商品全称: </p><el-input v-model="shopInfoData.title" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <div class="layoutBox">
+                    <el-form-item>
+                      <p>商品简称</p><el-input v-model="shopInfoData.name" clearable autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>商品编码</p><el-input v-model="shopInfoData.num" clearable autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>商品类目</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopInfoData.typeId" @change="handleChange"></el-cascader>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>物料分类</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopInfoData.cateId" @change="handleChange"></el-cascader>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>到期时间</p>
+                      <template>
+                        <div class="block">
+                          <el-date-picker
+                            v-model="shopInfoData.data"
+                            type="date"
+                            placeholder="选择日期">
+                          </el-date-picker>
+                        </div>
+                      </template>
+                    </el-form-item>
+                    <el-form-item>
+                      <p>商品品牌</p><el-input v-model="shopInfoData.brand" clearable autocomplete="off"></el-input>
+                    </el-form-item>
+                  </div>
+                  <!-- 导入富文本 -->
+                  <h5>商品详情</h5><quill-editor v-model="shopInfoData.content" :options="editorOption"></quill-editor>
+                  <h5>包装清单</h5><el-input v-model="shopInfoData.packages" type="textarea"></el-input>
+              </el-form>
+            </section>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogChange = false">取消</el-button>
+              <el-button type="primary" @click="changeShopContent()">修改</el-button>
             </span>
           </el-dialog>
         </div>
@@ -120,12 +220,15 @@
     </div>
 </template>
 <script>
-import { matterDefineApi, matterCategoryApi } from '@/api'
+import { matterDefineApi, matterCategoryApi, matterCustomApi, addNewGoodsApi, changeStateApi, deleteShopApi, getMatterInfoApi, changeMatterApi } from '@/api'
 export default {
+  name: 'App',
   data() {
     return {
       // 获取分页数据
       matterListData: [],
+      // 获取自定义分类数据
+      matterCustomData: [],
       // 获取表格数据
       tableData: [],
       // 当前激活状态栏
@@ -157,29 +260,64 @@ export default {
         // 控制级联选择器只选则单个值
         emitPath: false
       },
-      // 选中状态的行
-      multipleSelection: [],
       // 控制开闭添加商品框
       dialogVisible: false,
-      // 表单数据
-      ruleForm: {
+      // 控制开闭修改商品框
+      dialogChange: false,
+      // 添加物料弹出框表单数据
+      shopForm: {
+        title: '',
+        name: '',
+        num: '',
+        cateId: '',
+        typeId: '',
+        pic: '',
+        packages: '',
+        brand: '',
+        content: '',
+        data: ''
       },
-      // 登陆框校验
+      // 添加修改框校验
       rules: {
       },
-      imageUrl: '',
-      files: []
+      // 保存图片内容
+      files: [],
+      // 富文本表头内容
+      editorOption: {
+        placeholder: '',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline'],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['clean'],
+            [{ 'size': ['small', false, 'large', 'huge'] }]
+          ]
+        }
+      },
+      // 商品详情数据
+      shopInfoData: []
     }
   },
   created() {
     this.getMatterList()
     this.matterDefine()
+    this.getMatterCustom()
   },
   methods: {
     // 获取分页数据
     async getMatterList() {
       const { data: res } = await matterCategoryApi()
       this.matterListData = res.data.cateList
+    },
+    // 获取自定义物料分类数据
+    async getMatterCustom() {
+      const { data: res } = await matterCustomApi()
+      this.matterCustomData = res.data.typeList
     },
     // 获取物料展示数据
     async matterDefine() {
@@ -192,7 +330,6 @@ export default {
       this.totalNum = res.data.page.totalPage
       // 获取总条数
       this.total = res.data.page.totalCount
-      console.log(res.data.page)
     },
     // 当前页数据动态改变
     handleCurrentChange(val) {
@@ -221,14 +358,14 @@ export default {
       this.matterDefineData.status = 2
       this.matterDefine()
     },
-    // 获取选中状态的每行数据
+    // 获取每行数据
     handleSelectionChange(val) {
       console.log(val)
-      this.multipleSelection = val
     },
-    // 添加新的商品
-    addNewGoods() {
-      this.dialogVisible = true
+    // 删除选中状态的数据
+    // 清空选中状态的数据
+    clearSelection() {
+      this.$refs.multipleTable.clearSelection()
     },
     // 移除图片
     handleRemove() {
@@ -239,6 +376,7 @@ export default {
     handleAvatarSuccess(res, file) {
       this.imageUrl = res.data.url
       this.files.push(file)
+      this.shopForm.pic = this.files[0].response.data.url
     },
     // 上传前格式和图片大小限制
     beforeAvatarUpload(file) {
@@ -251,6 +389,47 @@ export default {
         this.$message.error('上传图片大小不能超过 2MB!')
       }
       return type && isLt2M
+    },
+    // 添加新的商品
+    async addNewGoods() {
+      const { data: res } = await addNewGoodsApi(this.shopForm)
+      if (res.code !== 0) return this.$$message.error('添加商品失败,请重试!')
+      this.$message({
+        message: '添加商品成功!',
+        type: 'success'
+      })
+      this.matterDefine()
+      this.dialogVisible = false
+    },
+    // 删除商品
+    async deleteShop(id) {
+      const { data: res } = await deleteShopApi([id])
+      console.log(res)
+    },
+    // 修改锁定状态
+    async changeState(status, id) {
+      status === 1 ? status = 2 : status = 1
+      const { data: res } = await changeStateApi({ status: status, id: id })
+      if (res.code !== 0) return this.$message.error('锁定商品失败')
+      this.matterDefine()
+    },
+    // 获取商品详情
+    async getShopInfo(id) {
+      const { data: res } = await getMatterInfoApi(id)
+      if (res.code !== 0) return this.$message.error('获取商品详情失败!')
+      this.dialogChange = true
+      this.shopInfoData = res.data.product
+    },
+    // 修改商品内容
+    async changeShopContent() {
+      const { data: res } = await changeMatterApi(this.shopInfoData)
+      if (res.code !== 0) return this.$message.error('修改商品内容失败!')
+      this.$message({
+        message: '修改商品成功!',
+        type: 'success'
+      })
+      this.matterDefine()
+      this.dialogChange = false
     }
   }
 }
@@ -334,11 +513,40 @@ export default {
   font-size: 16px;
   line-height: 30px;
 }
+.el-dialog h5 {
+  margin: 10px 0 5px -20px;
+  width: 100%;
+  height: 30px;
+  color: #000;
+  font-family:Microsoft YaHei;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+}
 .el-dialog section {
   padding: 10px 20px;
   width: 710px;
   height: 300px;
-  background-color: yellowgreen;
+}
+.formImg p {
+  line-height: 100px;
+}
+.el-form .el-form-item {
+  margin-bottom: 15px;
+}
+.el-form .el-input {
+  width: 250px !important;
+}
+.el-form .shopFullName .el-input {
+  width: 605px !important;
+}
+.el-form .layoutBox {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #E5E5E5;
+}
+.el-form .layoutBox .el-form-item {
+  width: 50%;
 }
 // 添加框添加图片样式
 .avatar-uploader{

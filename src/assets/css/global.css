@@ -280,16 +280,35 @@ div {
     height: 16px !important;
     font-size: 16px;
 }
-.mattterDefine_content .el-table__row .el-table_1_column_2 {
+.matterDefine_content .el-table__row .el-table_1_column_2 {
     padding: 6px 12px !important;
 }
 /* 物料定义表单样式 */
-.mattterDefine_content .el-dialog {
+.matterDefine_content .el-dialog {
     width: 800px;
     height: 800px;
 }
-.mattterDefine_content .el-dialog .el-dialog__body {
+.matterDefine_content .el-dialog .el-dialog__body {
     width: 100%;
     height: 642px;
+}
+.matterDefine_content .el-form .el-input {
+    width: 250px !important;
+}
+/* 富文本样式 */
+.ql-toolbar .ql-snow {
+    padding: 0;
+}
+.matterDefine_content .el-dialog {
+    line-height: 21px;
+}
+.ql-container {
+    height: 80px !important;
+}
+.el-textarea__inner {
+    height: 80px;
+}
+.matterDefine_content .el-dialog__footer {
+    text-align: right;
 }
 

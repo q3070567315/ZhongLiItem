@@ -77,12 +77,47 @@ export const delMenuItemApi = params => {
   return axios.post('/sys/menu/delete?menuId=' + params)
 }
 
-// 物料分类数据
+// 物料定义数据
+export const matterDefineApi = params => {
+  return axios.get('/sys/product/list?typeId=' + params.typeId + '&name=' + params.name + '&page=' + params.page + '&size=' + params.size + '&status=' + params.status)
+}
+
+// 自定义物料分类
+export const matterCustomApi = params => {
+  return axios.get('/sys/product/type-list')
+}
+
+// 添加新物料
+export const addNewGoodsApi = params => {
+  return axios.post('/sys/product/save', params)
+}
+
+// 删除物料
+export const deleteShopApi = params => {
+  return axios.post('/sys/product/delete', params)
+}
+
+// 修改物料锁定状态
+export const changeStateApi = params => {
+  return axios.post('/sys/product/set-status', params)
+}
+
+// 获取物料详情
+export const getMatterInfoApi = params => {
+  return axios.post('/sys/product/info?id=' + params)
+}
+
+// 修改物料
+export const changeMatterApi = params => {
+  return axios.post('/sys/product/update', params)
+}
+
+// 物料分类
 export const matterCategoryApi = params => {
   return axios.get('/sys/product/cate-list')
 }
 
-// 物料定义数据
-export const matterDefineApi = params => {
-  return axios.get('/sys/product/list?typeId=' + params.typeId + '&name=' + params.name + '&page=' + params.page + '&size=' + params.size + '&status=' + params.status)
+// 添加物料分类
+export const addCategoryApi = params => {
+  return axios.post('/sys/product/save-type', params)
 }
