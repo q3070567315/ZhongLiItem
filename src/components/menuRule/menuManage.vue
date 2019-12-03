@@ -11,7 +11,7 @@
         </el-row>
         <!-- 菜单管理表格区 -->
         <el-row>
-            <el-table ref="multipleTable" :data="allMenuData" border style="width: 100%" row-key="menuId" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" highlight-current-row>
+            <el-table ref="multipleTable" :data="allMenuData" border style="width: 100%" row-key="menuId" :tree-props="{childList: 'childList'}" highlight-current-row>
               <el-table-column label="选择" width="60" header-align="center" align="right">
                 <template slot-scope="scope">
                     <el-radio v-model="radioValue" :label="scope.row.menuId">&nbsp;</el-radio>

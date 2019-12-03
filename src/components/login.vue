@@ -15,7 +15,7 @@
             <div class="login_box">
                 <!-- 标签页切换 -->
                 <div class="tabs">
-                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <el-tabs v-model="activeName">
                         <el-tab-pane label="手机登陆" name="first">
                             <!-- 手机登陆表单 -->
                             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >

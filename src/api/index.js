@@ -112,7 +112,7 @@ export const changeMatterApi = params => {
   return axios.post('/sys/product/update', params)
 }
 
-// 物料分类
+// 物料分类数据
 export const matterCategoryApi = params => {
   return axios.get('/sys/product/cate-list')
 }
@@ -120,4 +120,19 @@ export const matterCategoryApi = params => {
 // 添加物料分类
 export const addCategoryApi = params => {
   return axios.post('/sys/product/save-type', params)
+}
+
+// 删除物料分类
+export const delCategoryApi = params => {
+  return axios.post('/sys/product/delete-type?id=' + params)
+}
+
+// 修改物料分类
+export const editCategoryApi = params => {
+  return axios.post('/sys/product/update-type', params)
+}
+
+// 合同管理数据
+export const contractManageApi = params => {
+  return axios.get('/sys/contract/list?type=' + params.type + '&title=' + params.title + '&page=' + params.page + '&size=' + params.size)
 }

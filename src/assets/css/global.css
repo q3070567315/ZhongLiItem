@@ -312,3 +312,19 @@ div {
     text-align: right;
 }
 
+/* 物料分类 */
+.matterCategory_content .el-dialog {
+    height: 420px;
+}
+.matterCategory_content .el-dialog__body {
+    margin-bottom: -40px;
+    height: 310px;
+}
+.el-textarea {
+    padding: 0;
+    width: 300px;
+    min-height: 50px;
+}
+.matterCategory_content .el-textarea__inner {
+    height: 60px !important;
+}

@@ -12,6 +12,7 @@ import InvoiceInforConfirm from './components/collProcurement/invoiceInforConfir
 import MatterCategory from './components/matterManage/matterCategory.vue'
 import MatterDefine from './components/matterManage/matterDefine.vue'
 import MenuManage from './components/menuRule/menuManage.vue'
+import ContractManage from './components/contractManage/contractManage.vue'
 import Lunzi from './components/lunzi.vue'
 import Lunzi2 from './components/lunzi2.vue'
 Vue.use(Router)
@@ -75,6 +76,11 @@ const router = new Router({
     {
       path: '/menuManage',
       component: MenuManage
+    },
+    // 合同管理
+    {
+      path: '/contractManage',
+      component: ContractManage
     },
     // 轮子
     {

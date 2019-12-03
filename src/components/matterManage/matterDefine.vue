@@ -116,10 +116,10 @@
                       <p>商品编码</p><el-input v-model="shopForm.num" clearable autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item>
-                      <p>商品类目</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopForm.typeId" @change="handleChange"></el-cascader>
+                      <p>商品类目</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopForm.cateId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
-                      <p>物料分类</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopForm.cateId" @change="handleChange"></el-cascader>
+                      <p>物料分类</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopForm.typeId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
                       <p>到期时间</p>
@@ -184,10 +184,10 @@
                       <p>商品编码</p><el-input v-model="shopInfoData.num" clearable autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item>
-                      <p>商品类目</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopInfoData.typeId" @change="handleChange"></el-cascader>
+                      <p>商品类目</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopInfoData.cateId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
-                      <p>物料分类</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopInfoData.cateId" @change="handleChange"></el-cascader>
+                      <p>物料分类</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopInfoData.typeId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
                       <p>到期时间</p>
@@ -280,8 +280,6 @@ export default {
       // 添加修改框校验
       rules: {
       },
-      // 保存图片内容
-      files: [],
       // 富文本表头内容
       editorOption: {
         placeholder: '',
@@ -369,14 +367,12 @@ export default {
     },
     // 移除图片
     handleRemove() {
-      this.files = []
-      this.imageUrl = ''
+      // this.files = []
+      this.shopForm.pic = ''
     },
-    // 上传成功回调
+    // 图片上传成功回调
     handleAvatarSuccess(res, file) {
-      this.imageUrl = res.data.url
-      this.files.push(file)
-      this.shopForm.pic = this.files[0].response.data.url
+      this.shopForm.pic = file.response.data.url
     },
     // 上传前格式和图片大小限制
     beforeAvatarUpload(file) {
@@ -398,6 +394,18 @@ export default {
         message: '添加商品成功!',
         type: 'success'
       })
+      this.shopForm = {
+        title: '',
+        name: '',
+        num: '',
+        cateId: '',
+        typeId: '',
+        pic: '',
+        packages: '',
+        brand: '',
+        content: '',
+        data: ''
+      }
       this.matterDefine()
       this.dialogVisible = false
     },
@@ -429,6 +437,7 @@ export default {
         type: 'success'
       })
       this.matterDefine()
+      this.shopInfoData = []
       this.dialogChange = false
     }
   }
