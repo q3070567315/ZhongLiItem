@@ -240,7 +240,7 @@ article p{
   // background-color: green;
 }
 .content>ul li p {
-  margin-left: 15px;
+  padding-left: 15px;
   height: 50px;
   line-height: 50px;
   color:rgba(0,0,0,1);

@@ -14,7 +14,7 @@
         <!-- 内容搜索区 -->
         <el-row :gutter="20">
           <el-col :span="3">
-            <el-cascader :options="matterCustomData" :props="defaultData" clearable  placeholder="选择分类" v-model="matterDefineData.typeId" @change="handleChange"></el-cascader>
+            <el-cascader ref="refHandles" :options="matterCustomData" :props="defaultData" clearable  placeholder="选择分类" v-model="matterDefineData.typeId" @change="handleChange"></el-cascader>
           </el-col>
           <el-col :span="3">
             <el-input placeholder="商品名称" clearable v-model="matterDefineData.name">
@@ -57,7 +57,7 @@
                   <!-- 锁定 -->
                   <a v-if="scope.row.status === 1" class="el-icon-lock" @click="changeState(scope.row.status,scope.row.id)"></a>
                   <!-- 删除 -->
-                  <a v-if="scope.row.status === 1" class="el-icon-delete" @click="deleteShop(scope.row.id)"></a>
+                  <a v-if="scope.row.status === 1" class="el-icon-delete" @click="delCategory([scope.row.id])"></a>
                   <!-- 2.启用状态 -->
                   <!-- 锁定 -->
                   <a v-if="scope.row.status === 2" class="el-icon-unlock" @click="changeState(scope.row.status,scope.row.id)"></a>
@@ -70,7 +70,7 @@
         <el-row class="layout_row">
           <!-- 选择按钮 -->
           <el-button class="examine_btn" @click="clearSelection()">清除选择</el-button>
-          <el-button class="cancelExamine_btn">删除所选</el-button>
+          <el-button class="cancelExamine_btn" @click="delSelection()">删除所选</el-button>
           <!-- 分页功能 -->
           <el-pagination
             layout="total, prev, pager, next, jumper"
@@ -119,7 +119,7 @@
                       <p>商品类目</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopForm.cateId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
-                      <p>物料分类</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopForm.typeId" @change="handleChange"></el-cascader>
+                      <p>物料分类</p><el-cascader ref="refHandle" :options="matterCustomData" :props="defaultData" clearable v-model="shopForm.typeId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
                       <p>到期时间</p>
@@ -187,7 +187,7 @@
                       <p>商品类目</p><el-cascader :options="matterListData" :props="defaultData" clearable v-model="shopInfoData.cateId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
-                      <p>物料分类</p><el-cascader :options="matterCustomData" :props="defaultData" clearable v-model="shopInfoData.typeId" @change="handleChange"></el-cascader>
+                      <p>物料分类</p><el-cascader ref="refHand" :options="matterCustomData" :props="defaultData" clearable v-model="shopInfoData.typeId" @change="handleChange"></el-cascader>
                     </el-form-item>
                     <el-form-item>
                       <p>到期时间</p>
@@ -255,10 +255,12 @@ export default {
       defaultData: {
         value: 'id',
         label: 'name',
-        children: null,
+        children: 'childList',
         expandTrigger: 'hover',
         // 控制级联选择器只选则单个值
-        emitPath: false
+        emitPath: false,
+        // 不关联父子节点
+        checkStrictly: true
       },
       // 控制开闭添加商品框
       dialogVisible: false,
@@ -315,7 +317,18 @@ export default {
     // 获取自定义物料分类数据
     async getMatterCustom() {
       const { data: res } = await matterCustomApi()
-      this.matterCustomData = res.data.typeList
+      this.matterCustomData = this.getTreeData(res.data.typeList)
+    },
+    // 递归遍历移除空的children(为了让级联选择器不显示空的子菜单)
+    getTreeData(data) {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].childList.length < 1) {
+          data[i].childList = undefined
+        } else {
+          this.getTreeData(data[i].childList)
+        }
+      }
+      return data
     },
     // 获取物料展示数据
     async matterDefine() {
@@ -340,6 +353,10 @@ export default {
       if (e === null) {
         this.matterDefineData.typeId = 0
       }
+      // 实现级联选择器选中文字关闭级联选择框
+      if (this.$refs.refHandles) { this.$refs.refHandles.dropDownVisible = false }
+      if (this.$refs.refHandle) { this.$refs.refHandle.dropDownVisible = false }
+      if (this.$refs.refHand) { this.$refs.refHand.dropDownVisible = false }
     },
     // 点击展示全部数据(包含锁定和未锁定的)
     allData() {
@@ -361,6 +378,14 @@ export default {
       console.log(val)
     },
     // 删除选中状态的数据
+    delSelection() {
+      let idArr = []
+      console.log(this.$refs.multipleTable.selection)
+      this.$refs.multipleTable.selection.forEach(res => {
+        idArr.push(res.id)
+        this.delCategory(idArr)
+      })
+    },
     // 清空选中状态的数据
     clearSelection() {
       this.$refs.multipleTable.clearSelection()
@@ -409,11 +434,6 @@ export default {
       this.matterDefine()
       this.dialogVisible = false
     },
-    // 删除商品
-    async deleteShop(id) {
-      const { data: res } = await deleteShopApi([id])
-      console.log(res)
-    },
     // 修改锁定状态
     async changeState(status, id) {
       status === 1 ? status = 2 : status = 1
@@ -439,6 +459,32 @@ export default {
       this.matterDefine()
       this.shopInfoData = []
       this.dialogChange = false
+    },
+    // 删除商品
+    async delShop(id) {
+      const { data: res } = await deleteShopApi(id)
+      if (res.code !== 0) return this.$message.error('删除商品失败')
+      this.$message({
+        type: 'success',
+        message: '删除商品成功!'
+      })
+      this.branchInfoForm = {
+        parentId: 0,
+        name: '',
+        num: '',
+        remark: ''
+      }
+      this.matterDefine()
+    },
+    // 删除商品弹框
+    delCategory(id) {
+      this.$confirm('确定删除该分类吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.delShop(id)
+      })
     }
   }
 }

@@ -42,7 +42,7 @@
                     <p>分类编码: </p><el-input v-model="branchForm.num" clearable autocomplete="off"></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <p>父级分类: </p><el-cascader :options="matterData" :props="defaultData" clearable v-model="branchForm.parentId" placeholder="请选择父级分类(没有则不选)"></el-cascader>
+                    <p>父级分类: </p><el-cascader @change="handlerValue" ref="refHandle" :options="matterData" :props="defaultData" clearable v-model="branchForm.parentId" placeholder="请选择父级分类(没有则不选)"></el-cascader>
                   </el-form-item>
                   <el-form-item>
                     <p>说明: </p><el-input v-model="branchForm.remark" clearable autocomplete="off" type="textarea"></el-input>
@@ -115,10 +115,12 @@ export default {
       defaultData: {
         value: 'id',
         label: 'name',
-        children: null,
+        children: 'childList',
         expandTrigger: 'hover',
         // 控制级联选择器只选则单个值
-        emitPath: false
+        emitPath: false,
+        // 不关联父子节点
+        checkStrictly: true
       },
       // 添加修改分类框校验
       rules: {
@@ -129,11 +131,27 @@ export default {
     this.getMatterList()
   },
   methods: {
+    // 实现级联选择器选中文字关闭级联选择框
+    handlerValue() {
+      if (this.$refs.refHandle) {
+        this.$refs.refHandle.dropDownVisible = false
+      }
+    },
     // 获取物料分类数据
     async getMatterList() {
       const { data: res } = await matterCustomApi()
-      this.matterData = res.data.typeList
-      console.log(this.matterData)
+      this.matterData = this.getTreeData(res.data.typeList)
+    },
+    // 递归遍历移除空的children(为了让级联选择器不显示空的子菜单)
+    getTreeData(data) {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].childList.length < 1) {
+          data[i].childList = undefined
+        } else {
+          this.getTreeData(data[i].childList)
+        }
+      }
+      return data
     },
     // 添加新的商品分类
     async addNewCategory() {
@@ -185,14 +203,13 @@ export default {
       if (res.code !== 0) return this.$message.error('修改分类失败')
       this.$message({
         type: 'success',
-        message: '添加成功!'
+        message: '修改分类成功!'
       })
       this.editDialog = false
       this.getMatterList()
     },
     // 新增子分类
     addChildrenCategory(id) {
-      console.log(id)
       this.branchForm.parentId = id
       this.dialogVisible = true
     }

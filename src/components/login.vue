@@ -37,7 +37,7 @@
                         </el-tab-pane>
                         <el-tab-pane label="邮箱登陆" name="second">
                             <!-- 邮箱登陆表单 -->
-                            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >
+                            <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >
                                 <el-form-item prop="username">
                                     <el-input v-model="ruleForm.email" placeholder="请输入登陆邮箱"  prefix-icon="el-icon-search" clearable></el-input>
                                 </el-form-item>
@@ -52,13 +52,13 @@
                                 <el-checkbox v-model="ruleForm.choose">记住登陆状态</el-checkbox>
                                 <el-link @click="routerJump('/register')" type="primary" :underline="false">注册新用户</el-link>
                                 <el-link @click="routerJump('/resetPassword')" type="primary" :underline="false">忘记密码?</el-link>
-                            </div>
+                            </div> -->
                         </el-tab-pane>
                     </el-tabs>
                 </div>
             </div>
         </div>
-        <!-- 特效波形图
+        <!-- 特效波形图 -->
         <div class="bolang">
             <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
                 <defs>
@@ -71,7 +71,7 @@
                     <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
                 </g>
             </svg>
-        </div> -->
+        </div>
         <!-- 登陆页面尾部 -->
         <div class="login_footer" :style="{'height': actionHeight+'px'}">
             <span>
@@ -119,6 +119,15 @@ export default {
   },
   created() {
     this.actionHeight = window.innerHeight - 800
+    if (this.$cookies.isKey('username')) {
+      this.ruleForm.username = this.$cookies.get('username')
+    }
+    if (this.$cookies.isKey('password')) {
+      this.ruleForm.password = this.$cookies.get('password')
+    }
+    if (this.$cookies.isKey('choose')) {
+      this.ruleForm.choose = true
+    }
   },
   methods: {
     // 跳转至登录页面
@@ -134,7 +143,16 @@ export default {
         if (!valid) return false
         const { data: res } = await loginApi(this.ruleForm)
         if (res.code !== 0) return this.$message.error('您输入的账号或者密码不正确')
-        window.sessionStorage.setItem('code', res.code)
+        if (this.ruleForm.choose === true) {
+          this.$cookies.set('username', this.ruleForm.username)
+          this.$cookies.set('password', this.ruleForm.password)
+          this.$cookies.set('choose', this.ruleForm.choose)
+        } else {
+          this.$cookies.remove('username')
+          this.$cookies.remove('password')
+          this.$cookies.remove('choose')
+        }
+        window.sessionStorage.setItem('token', res.data.token)
         this.$router.push('/home')
       })
     }
@@ -240,55 +258,55 @@ export default {
 }
 
 // 特效波形图
-// .bolang {
-//     position: absolute;
-//     top: 661px;
-//     width: 100%;
-// }
-// .waves {
-//   position:relative;
-//   width: 100%;
-//   height:15vh;
-//   margin-bottom:-7px;
-//   min-height:100px;
-//   max-height:150px;
-// }
-// /* Animation */
+.bolang {
+    position: absolute;
+    top: 661px;
+    width: 100%;
+}
+.waves {
+  position:relative;
+  width: 100%;
+  height:15vh;
+  margin-bottom:-7px;
+  min-height:100px;
+  max-height:150px;
+}
+/* Animation */
 
-// .parallax > use {
-//   animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
-// }
-// .parallax > use:nth-child(1) {
-//   animation-delay: -2s;
-//   animation-duration: 7s;
-// }
-// .parallax > use:nth-child(2) {
-//   animation-delay: -3s;
-//   animation-duration: 10s;
-// }
-// .parallax > use:nth-child(3) {
-//   animation-delay: -4s;
-//   animation-duration: 13s;
-// }
-// .parallax > use:nth-child(4) {
-//   animation-delay: -5s;
-//   animation-duration: 20s;
-// }
-// @keyframes move-forever {
-//   0% {
-//    transform: translate3d(-90px,0,0);
-//   }
-//   100% {
-//     transform: translate3d(85px,0,0);
-//   }
-// }
-// @media (max-width: 768px) {
-//   .waves {
-//     height:40px;
-//     min-height:40px;
-//   }
-//   .content {
-//     height:30vh;
-//   }
-// }
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% {
+   transform: translate3d(-90px,0,0);
+  }
+  100% {
+    transform: translate3d(85px,0,0);
+  }
+}
+@media (max-width: 768px) {
+  .waves {
+    height:40px;
+    min-height:40px;
+  }
+  .content {
+    height:30vh;
+  }
+}
 </style>

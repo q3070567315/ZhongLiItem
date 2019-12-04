@@ -3,6 +3,8 @@
         <!-- 侧边栏 style="display:none;" -->
         <el-aside :width="isCollapse ? '64px':'220px'">
             <div class="logo"><i>LOGO</i> SRM系统</div>
+            <!-- 隐藏侧边栏时显示的图标L -->
+            <div style="display: none" ref='reduceLogo' class="reduceLogo">L</div>
             <!-- 导航菜单start -->
             <el-menu default-active="1-4-1" class="el-menu-vertical-demo" background-color="#24262F" text-color="#fff" unique-opened active-text-color="#fff" :collapse="isCollapse">
                 <!-- 一级菜单 -->
@@ -207,6 +209,9 @@ export default {
     // 隐藏侧边栏
     hiddenAside() {
       this.isCollapse = !this.isCollapse
+      console.log(this.$refs.reduceLogo)
+      let box = this.$refs.reduceLogo
+      box.style.display === 'block' ? box.style.display = 'none' : box.style.display = 'block'
     },
     // 个人中心路由跳转
     personRouter() {
@@ -265,7 +270,7 @@ export default {
     async logout() {
       const { data: res } = await logoutApi()
       if (res.code !== 0) return this.$message.error('退出登录失败!')
-      window.sessionStorage.removeItem('code')
+      window.sessionStorage.removeItem('token')
       this.$router.push('/login')
     },
     // 获取左侧导航菜单
@@ -329,6 +334,7 @@ export default {
 }
 // 侧边栏
 .el-aside {
+    position: relative;
     height: 100%;
     background-color: #24262F;
 }
@@ -348,6 +354,19 @@ export default {
     font-weight:400;
     color:rgba(255,131,131,1);
     line-height:35px;
+}
+.el-aside .reduceLogo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 50px;
+    width: 64px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 23px;
+    font-weight: 400;
+    color:rgba(255,131,131,1);
+    background-color: #3483b0;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
     border: 0;

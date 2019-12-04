@@ -6,20 +6,20 @@
         <!-- 锁定选择区 -->
         <el-row>
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1">全部</el-menu-item>
-            <el-menu-item index="2">待确定</el-menu-item>
-            <el-menu-item index="3">待采购商确认</el-menu-item>
-            <el-menu-item index="4">已确认</el-menu-item>
+            <el-menu-item index="1" @click="allData">全部</el-menu-item>
+            <el-menu-item index="2" @click="unAgreeData">待确定</el-menu-item>
+            <el-menu-item index="3" @click="unPurchaseData">待采购商确认</el-menu-item>
+            <el-menu-item index="4" @click="agreeData">已确认</el-menu-item>
           </el-menu>
         </el-row>
         <!-- 内容搜索区 -->
         <el-row :gutter="20">
           <el-col :span="3">
-            <el-input placeholder="合同名称" clearable>
+            <el-input placeholder="合同名称" clearable v-model="contractManageData.title">
             </el-input>
           </el-col>
           <el-col :span="2">
-            <el-button type="primary">查询</el-button>
+            <el-button type="primary" @click="contractManage()">查询</el-button>
           </el-col>
           <el-col :span="19">
             <el-button type="primary" class="add_btn">添加</el-button>
@@ -27,16 +27,29 @@
         </el-row>
         <!-- 物料定义表格区 -->
         <el-row>
-          <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%">
+          <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="title" label="合同信息" sortable width="369"></el-table-column>
-            <el-table-column prop="" label="项目" sortable width="240"></el-table-column>
-            <el-table-column prop="" label="商品信息" sortable width="300"></el-table-column>
+            <el-table-column prop="" label="项目名称" sortable width="240"></el-table-column>
+            <el-table-column prop="" label="合同详情" sortable width="300"></el-table-column>
             <el-table-column prop="finishTime" label="签订日期" sortable width="200"></el-table-column>
-            <el-table-column prop="status" label="状态" width="260">
+            <el-table-column prop="type" label="状态" width="260">
             </el-table-column>
             <el-table-column label="操作" width="150"></el-table-column>
           </el-table>
+        </el-row>
+        <el-row class="layout_row">
+          <!-- 选择按钮 -->
+          <el-button class="examine_btn" @click="clearSelection()">清除选择</el-button>
+          <el-button class="cancelExamine_btn">删除所选</el-button>
+          <!-- 分页功能 -->
+          <el-pagination
+            layout="total, prev, pager, next, jumper"
+            :current-page="currentPage"
+            @current-change="handleCurrentChange"
+            :page-size="contractManageData.size"
+            :total="total">
+          </el-pagination>
         </el-row>
       </el-card>
     </div>
@@ -86,6 +99,38 @@ export default {
       this.totalNum = res.data.page.totalPage
       // 获取总条数
       this.total = res.data.page.totalCount
+    },
+    // 当前页数据动态改变
+    handleCurrentChange(val) {
+      this.contractManageData.page = val
+      this.currentPage = val
+      this.contractManage()
+    },
+    // 获取每行数据
+    handleSelectionChange(val) {
+      console.log(val)
+    },
+    // 删除选中状态的数据
+    // 清空选中状态的数据
+    clearSelection() {
+      this.$refs.multipleTable.clearSelection()
+    },
+    // 点击展示全部数据
+    allData() {
+      this.contractManageData.type = 0
+      this.contractManage()
+    },
+    unAgreeData() {
+      this.contractManageData.type = 1
+      this.contractManage()
+    },
+    unPurchaseData() {
+      this.contractManageData.type = 2
+      this.contractManage()
+    },
+    agreeData() {
+      this.contractManageData.type = 3
+      this.contractManage()
     }
   }
 }

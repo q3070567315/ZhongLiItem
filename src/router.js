@@ -98,8 +98,8 @@ const router = new Router({
 // 挂载路由导航守卫
 router.beforeEach((to, from, next) => {
   if (to.path === '/login' || to.path === '/register' || to.path === '/resetPassword') return next()
-  const codeStr = window.sessionStorage.getItem('code')
-  if (!codeStr) return next('/login')
+  const Token = window.sessionStorage.getItem('token')
+  if (!Token) return next('/login')
   next()
 })
 export default router

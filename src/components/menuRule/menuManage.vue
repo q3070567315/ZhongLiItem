@@ -49,7 +49,7 @@
                   <p>新增菜单名称: </p><el-input v-model="ruleForm.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item prop="parentId" ref="parentId" style="display: none">
-                  <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="ruleForm.parentId"></el-cascader>
+                  <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="ruleForm.parentId" placeholder="请选择父级菜单"></el-cascader>
               </el-form-item>
               <el-form-item prop="url">
                   <p>菜单跳转url: </p><el-input v-model="ruleForm.url" placeholder="菜单跳转url(没有则不填)" type="text" prefix-icon="el-icon-search" clearable></el-input>
@@ -84,7 +84,7 @@
                   <p>修改菜单名称: </p><el-input v-model="menuDetail.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item prop="parentId" ref="parentId2" style="display: none">
-                  <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="menuDetail.parentId"></el-cascader>
+                  <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="menuDetail.parentId" placeholder="请选择父级菜单"></el-cascader>
               </el-form-item>
               <el-form-item prop="url">
                   <p>菜单跳转url: </p><el-input v-model="menuDetail.url" placeholder="菜单跳转url(没有则不填)" type="text" prefix-icon="el-icon-search" clearable></el-input>
@@ -139,6 +139,8 @@ export default {
         expandTrigger: 'hover',
         // 控制级联选择器只选则单个值
         emitPath: false
+        // 不关联父子节点
+        // checkStrictly: true
       }
     }
   },
