@@ -18,7 +18,7 @@ ul {
     padding: 0;
 }
 body {
-    min-width:1900px;
+    min-width:1200px;
 	/* overflow:auto; */
 }
 a {
@@ -298,6 +298,8 @@ div {
 }
 /* 物料定义表单样式 */
 .matterDefine_content .el-dialog {
+    margin-top: 50px !important;
+    margin-bottom: 0;
     width: 800px;
     height: 800px;
 }
@@ -340,4 +342,40 @@ div {
 }
 .matterCategory_content .el-textarea__inner {
     height: 60px !important;
+}
+/* 合同管理 */
+/* 合同列表 */
+.contractManage_content .el-dialog {
+    margin-top: 50px !important;
+    margin-bottom: 0;
+    height: 900px;
+    width: 900px;
+}
+.contractManage_content .el-dialog section {
+    width: 830px;
+}
+.contractManage_content .el-dialog__body {
+    height: 730px !important;
+}
+.contractManage_content .el-form .el-input {
+    width: 750px !important;
+}
+.contractManage_content .el-textarea {
+    padding: 0;
+    width: 100%;
+    min-height: 50px;
+}
+.contractManage_content .el-dialog__footer {
+    text-align: right;
+}
+.contractManage_content .el-dialog {
+    line-height: 21px;
+}
+.contractManage_content .contact .el-input {
+    margin-bottom: 10px;
+    width: 270px !important;
+    height: 34px !important;
+}
+.contractManage_content .contact .el-input__inner {
+    height: 34px;
 }

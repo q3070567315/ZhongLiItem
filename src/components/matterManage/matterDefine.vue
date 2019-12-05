@@ -37,12 +37,13 @@
                   <img v-else src="../../assets/img/defaultHead.jpg">
                 </template>
               </el-table-column>
+              <el-table-column prop="id" label="商品id" sortable width="111"></el-table-column>
               <el-table-column prop="name" label="商品名称" sortable width="220"></el-table-column>
               <el-table-column prop="num" label="商品编码" sortable width="140"></el-table-column>
               <el-table-column prop="typeName" label="所属分类" sortable width="200"></el-table-column>
               <el-table-column prop="createTime" label="到期时间" sortable width="200"></el-table-column>
-              <el-table-column prop="unit" label="计量单位" sortable width="211"></el-table-column>
-              <el-table-column label="状态" width="260">
+              <el-table-column prop="unit" label="计量单位" sortable width="160"></el-table-column>
+              <el-table-column label="状态" width="200">
                 <template slot-scope="scope">
                   <div v-if="scope.row.status === 1"><p></p>未锁定</div>
                   <div v-else-if="scope.row.status === 2"><p style="background-color: #409EFF;"></p>锁定</div>

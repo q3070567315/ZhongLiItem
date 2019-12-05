@@ -11,7 +11,7 @@
         </el-row>
         <!-- 菜单管理表格区 -->
         <el-row>
-            <el-table ref="multipleTable" :data="allMenuData" border style="width: 100%" row-key="menuId" :tree-props="{childList: 'childList'}" highlight-current-row>
+            <el-table ref="multipleTable" :data="allMenuData" border style="width: 100%" row-key="menuId" :tree-props="{childList: 'childList'}" highlight-current-row  :default-sort="{ prop: 'orderNum'}">
               <el-table-column label="选择" width="60" header-align="center" align="right">
                 <template slot-scope="scope">
                     <el-radio v-model="radioValue" :label="scope.row.menuId">&nbsp;</el-radio>
@@ -36,7 +36,7 @@
       <!-- 新增菜单模板 -->
       <template id="newMenu">
         <div>
-          <el-dialog title="新增" :visible.sync="newMenuVisible" width="30%">
+          <el-dialog title="新增" :visible.sync="newMenuVisible" width="30%" :close-on-click-modal="false">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
               <el-form-item prop="type">
                   <p>类型:</p>
@@ -71,7 +71,7 @@
       <!-- 修改菜单模板 -->
       <template id="editMenu">
         <div slot="footer">
-          <el-dialog title="修改" :visible.sync="editMenuVisible" width="30%">
+          <el-dialog title="修改" :visible.sync="editMenuVisible" width="30%" :close-on-click-modal="false">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
               <el-form-item prop="type">
                   <p>类型:</p>

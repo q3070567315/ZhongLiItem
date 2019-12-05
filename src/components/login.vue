@@ -59,7 +59,7 @@
             </div>
         </div>
         <!-- 特效波形图 -->
-        <div class="bolang">
+        <!-- <div class="bolang">
             <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
                 <defs>
                     <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
@@ -71,7 +71,7 @@
                     <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
                 </g>
             </svg>
-        </div>
+        </div> -->
         <!-- 登陆页面尾部 -->
         <div class="login_footer" :style="{'height': actionHeight+'px'}">
             <span>
@@ -91,6 +91,7 @@
 </template>
 <script>
 import { loginApi } from '@/api'
+import Utils from '@/utils'
 export default {
   data() {
     return {
@@ -123,7 +124,7 @@ export default {
       this.ruleForm.username = this.$cookies.get('username')
     }
     if (this.$cookies.isKey('password')) {
-      this.ruleForm.password = this.$cookies.get('password')
+      this.ruleForm.password = Utils.decrypt(this.$cookies.get('password'), 'hAw6eqnFLKxpsDv3')
     }
     if (this.$cookies.isKey('choose')) {
       this.ruleForm.choose = true
@@ -144,9 +145,15 @@ export default {
         const { data: res } = await loginApi(this.ruleForm)
         if (res.code !== 0) return this.$message.error('您输入的账号或者密码不正确')
         if (this.ruleForm.choose === true) {
-          this.$cookies.set('username', this.ruleForm.username)
-          this.$cookies.set('password', this.ruleForm.password)
-          this.$cookies.set('choose', this.ruleForm.choose)
+          // 设置cookies保存时间
+          var date = new Date()
+          date.setDate(date.getDate() + 15
+          )
+          // 对cookies中的密码进行crypt-js加密
+          let psd = Utils.encrypt(this.ruleForm.password, 'hAw6eqnFLKxpsDv3')
+          this.$cookies.set('username', this.ruleForm.username, date)
+          this.$cookies.set('password', psd, date)
+          this.$cookies.set('choose', this.ruleForm.choose, date)
         } else {
           this.$cookies.remove('username')
           this.$cookies.remove('password')
@@ -258,55 +265,55 @@ export default {
 }
 
 // 特效波形图
-.bolang {
-    position: absolute;
-    top: 661px;
-    width: 100%;
-}
-.waves {
-  position:relative;
-  width: 100%;
-  height:15vh;
-  margin-bottom:-7px;
-  min-height:100px;
-  max-height:150px;
-}
-/* Animation */
+// .bolang {
+//     position: absolute;
+//     top: 661px;
+//     width: 100%;
+// }
+// .waves {
+//   position:relative;
+//   width: 100%;
+//   height:15vh;
+//   margin-bottom:-7px;
+//   min-height:100px;
+//   max-height:150px;
+// }
+// /* Animation */
 
-.parallax > use {
-  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
-}
-.parallax > use:nth-child(1) {
-  animation-delay: -2s;
-  animation-duration: 7s;
-}
-.parallax > use:nth-child(2) {
-  animation-delay: -3s;
-  animation-duration: 10s;
-}
-.parallax > use:nth-child(3) {
-  animation-delay: -4s;
-  animation-duration: 13s;
-}
-.parallax > use:nth-child(4) {
-  animation-delay: -5s;
-  animation-duration: 20s;
-}
-@keyframes move-forever {
-  0% {
-   transform: translate3d(-90px,0,0);
-  }
-  100% {
-    transform: translate3d(85px,0,0);
-  }
-}
-@media (max-width: 768px) {
-  .waves {
-    height:40px;
-    min-height:40px;
-  }
-  .content {
-    height:30vh;
-  }
-}
+// .parallax > use {
+//   animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+// }
+// .parallax > use:nth-child(1) {
+//   animation-delay: -2s;
+//   animation-duration: 7s;
+// }
+// .parallax > use:nth-child(2) {
+//   animation-delay: -3s;
+//   animation-duration: 10s;
+// }
+// .parallax > use:nth-child(3) {
+//   animation-delay: -4s;
+//   animation-duration: 13s;
+// }
+// .parallax > use:nth-child(4) {
+//   animation-delay: -5s;
+//   animation-duration: 20s;
+// }
+// @keyframes move-forever {
+//   0% {
+//    transform: translate3d(-90px,0,0);
+//   }
+//   100% {
+//     transform: translate3d(85px,0,0);
+//   }
+// }
+// @media (max-width: 768px) {
+//   .waves {
+//     height:40px;
+//     min-height:40px;
+//   }
+//   .content {
+//     height:30vh;
+//   }
+// }
 </style>

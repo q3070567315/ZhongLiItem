@@ -211,7 +211,6 @@ export default {
           const { data: res } = await sendVerificationApi({ type: 1, mobile: this.ruleForm.mobile })
           if (res.code !== 0) return this.$message.error('发送验证码失败!')
           this.$message.success('验证码发送成功!')
-          console.log(res)
           // 获取验证码按钮元素(实现验证码倒计时功能)
           var sendBtn = this.$refs.sendVeri.$el
           let num = 60
@@ -262,7 +261,6 @@ export default {
     },
     // 同意用户规则
     agreeUserRule(formName) {
-      console.log(123)
       this.$refs[formName].validateField('choose', chooseError => {
         if (!chooseError) return false
       })

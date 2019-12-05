@@ -5,6 +5,7 @@ axios.defaults.baseURL = 'http://apisrm.soolcool.com/'
 // 请求拦截器
 axios.interceptors.request.use(res => {
   Nprogress.start()
+  res.headers['token'] = window.sessionStorage.getItem('token')
   return res
 })
 axios.interceptors.response.use(res => {

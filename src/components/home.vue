@@ -6,21 +6,21 @@
             <!-- 隐藏侧边栏时显示的图标L -->
             <div style="display: none" ref='reduceLogo' class="reduceLogo">L</div>
             <!-- 导航菜单start -->
-            <el-menu default-active="1-4-1" class="el-menu-vertical-demo" background-color="#24262F" text-color="#fff" unique-opened active-text-color="#fff" :collapse="isCollapse">
+            <el-menu :default-active="$route.path" class="el-menu-vertical-demo" background-color="#24262F" text-color="#fff" unique-opened active-text-color="#fff" :collapse="isCollapse" :router="true" @select="asideChange">
                 <!-- 一级菜单 -->
-                <el-submenu :index="item.menuId + ''" v-for="item in navMenu" :key="item.menuId">
+                <el-submenu :index="item.url + ''" v-for="item in navMenu" :key="item.menuId">
                     <template slot="title">
-                        <!-- 图标 -->
-                        <i :class="item.icon"></i>
-                        <span>{{item.name}}</span>
+                      <!-- 图标 -->
+                      <i :class="item.icon"></i>
+                      <span>{{item.name}}</span>
                     </template>
                     <!-- 二级菜单 -->
-                    <el-menu-item :index="'/'+subItem.menuId" v-for="subItem in item.list" :key="subItem.menuId">
-                            <template slot="title">
-                            <!-- 图标 -->
-                            <i :class="subItem.icon"></i>
-                            <span>{{subItem.name}}</span>
-                            </template>
+                    <el-menu-item :index="'/'+subItem.url" v-for="subItem in item.list" :key="subItem.menuId">
+                      <template slot="title">
+                      <!-- 图标 -->
+                      <i :class="subItem.icon"></i>
+                      <span>{{subItem.name}}</span>
+                      </template>
                     </el-menu-item>
                 </el-submenu>
             </el-menu>
@@ -51,7 +51,7 @@
             </el-header>
             <!-- 主体内容区 -->
             <el-main>
-                <!-- 主体内容导航栏   @click="addTab(editableTabsValue2)"-->
+                <!-- 主体内容导航栏 -->
                 <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
                     <!-- 主体导航栏主页 -->
                     <el-tab-pane>
@@ -239,6 +239,7 @@ export default {
             let nextTab = tabs[index + 1] || tabs[index - 1]
             if (nextTab) {
               activeName = nextTab.name
+              this.$router.push(nextTab.url)
             } else {
               this.$router.push('/index')
               window.location.reload()
@@ -323,6 +324,10 @@ export default {
         message: '修改密码成功!'
       })
       this.dialogVisible = false
+    },
+    // 侧边栏激活触发事件
+    asideChange(index, res, e) {
+      this.addTab(this.editableTabsValue, e._vnode.elm.innerText, index)
     }
   }
 }
@@ -331,6 +336,7 @@ export default {
 .home_contaner {
     display: flex;
     height: 100%;
+    min-width: 1900px;
 }
 // 侧边栏
 .el-aside {
@@ -372,6 +378,9 @@ export default {
     border: 0;
     width: 220px;
     min-height: 400px;
+}
+.el-dropdown-menu__item {
+  width: 96px;
 }
 
 // 内容区

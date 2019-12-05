@@ -1,6 +1,6 @@
 //  合同管理
 <template>
-    <div class="matterDefine_content">
+    <div class="contractManage_content">
       <!-- 卡片视图区 -->
       <el-card>
         <!-- 锁定选择区 -->
@@ -22,7 +22,7 @@
             <el-button type="primary" @click="contractManage()">查询</el-button>
           </el-col>
           <el-col :span="19">
-            <el-button type="primary" class="add_btn">添加</el-button>
+            <el-button type="primary" class="add_btn" @click="dialogVisible = true">添加</el-button>
           </el-col>
         </el-row>
         <!-- 物料定义表格区 -->
@@ -52,6 +52,55 @@
           </el-pagination>
         </el-row>
       </el-card>
+            <!-- 添加商品弹出框 -->
+      <template>
+        <div>
+          <el-dialog title="合同明细" :visible.sync="dialogVisible" :close-on-click-modal="false">
+            <h4>基本信息<a href="javascript:;">打印</a></h4>
+            <section>
+              <!-- 商品信息表单 -->
+              <el-form :model="contractForm" :rules="rules" ref="ruleForm">
+                  <el-form-item prop="pic" class="formImg">
+                    <p>标题: </p><el-input v-model="contractForm.title" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="title" class="shopFullName">
+                    <p>合同编号: </p><el-input v-model="contractForm.num" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <p>客户目录: </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <!-- 导入富文本 -->
+                  <h5>商品信息<a href="javascript:;">新增</a></h5>
+                    <el-table :data="shopInfo" height="194" border style="width: 100%; border-size: 0;">
+                      <el-table-column prop="date" label="日期" width="180"></el-table-column>
+                      <el-table-column prop="name" label="姓名" width="180"></el-table-column>
+                      <el-table-column prop="address" label="地址"></el-table-column>
+                    </el-table>
+                  <h5>合同条款<a href="javascript:;">新增</a></h5><quill-editor v-model="contractForm.content" :options="editorOption"></quill-editor>
+                  <h5>联系方式</h5>
+                  <div class="contact">
+                    <p>甲方 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>乙方 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>地址 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>地址 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>电话 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>电话 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>开户行 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>开户行 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>代表签字 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>代表签字 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>日期 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                    <p>日期 </p><el-input v-model="contractForm.brand" clearable autocomplete="off"></el-input>
+                  </div>
+              </el-form>
+            </section>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+              <el-button type="primary" @click="addNewGoods()">添加</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </template>
     </div>
 </template>
 <script>
@@ -80,6 +129,71 @@ export default {
         size: 7,
         // 合同名称
         title: ''
+      },
+      // 控制开闭新增合同框
+      dialogVisible: false,
+      // 新增校验
+      rules: {
+      },
+      shopInfo: [{
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+      //   date: '2016-05-02',
+      //   name: '王小虎',
+      //   address: '上海市普陀区金沙江路 1518 弄'
+      // }, {
+      //   date: '2016-05-02',
+      //   name: '王小虎',
+      //   address: '上海市普陀区金沙江路 1518 弄'
+      // }, {
+      //   date: '2016-05-02',
+      //   name: '王小虎',
+      //   address: '上海市普陀区金沙江路 1518 弄'
+      // }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
+      // 富文本表头内容
+      editorOption: {
+        placeholder: '',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline'],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['clean'],
+            [{ 'size': ['small', false, 'large', 'huge'] }]
+          ]
+        }
+      },
+      // 新增合同弹出框数据
+      contractForm: {
+        title: '',
+        num: '',
+        toId: 0,
+        fromCompany: '',
+        fromAddress: '',
+        fromMobile: '',
+        fromName: '',
+        fromSignDate: '',
+        fromBank: '',
+        toCompany: '',
+        toAdress: '',
+        toMobile: '',
+        toSignDate: '',
+        toBank: '',
+        productList: []
       }
     }
   },
@@ -202,5 +316,56 @@ export default {
 .el-menu-demo {
   margin: -20px 0 20px 0;
   font-weight: 400;
+}
+// 新增框
+.el-dialog h4 {
+  margin-bottom: 10px;
+  width: 100%;
+  height: 30px;
+  color: #000;
+  font-family:Microsoft YaHei;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+}
+.el-dialog h5 {
+  margin: 30px 0 5px -20px;
+  padding-top: 30px;
+  width: 100%;
+  height: 30px;
+  color: #000;
+  font-family:Microsoft YaHei;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  border-top: 1px solid #eee;
+}
+.el-dialog h4 a {
+  float: right;
+  color: #409EFF;
+  margin-right: 15px;
+}
+.el-dialog h5 a {
+  float: right;
+  color: #409EFF;
+  margin-right: -12px;
+}
+.el-dialog section {
+  padding: 10px 20px;
+  width: 710px;
+  height: 300px;
+}
+// 联系方式下的样式
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  width: 830px;
+}
+.contact p {
+  margin: 0 10px 0 50px;
+  height: 34px;
+  width: 60px;
+  line-height: 34px;
+  text-align: right;
 }
 </style>
