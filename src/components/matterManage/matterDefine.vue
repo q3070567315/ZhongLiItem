@@ -381,7 +381,6 @@ export default {
     // 删除选中状态的数据
     delSelection() {
       let idArr = []
-      console.log(this.$refs.multipleTable.selection)
       this.$refs.multipleTable.selection.forEach(res => {
         idArr.push(res.id)
         this.delCategory(idArr)

@@ -12,12 +12,14 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+// 导入时间格式
+import moment from 'moment'
 
+Vue.prototype.$moment = moment
 Vue.use(VueCookies)
 Vue.use(VueQuillEditor)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
-
 new Vue({
   router,
   render: h => h(App)

@@ -272,6 +272,7 @@ export default {
       const { data: res } = await logoutApi()
       if (res.code !== 0) return this.$message.error('退出登录失败!')
       window.sessionStorage.removeItem('token')
+      window.sessionStorage.removeItem('userInfo')
       this.$router.push('/login')
     },
     // 获取左侧导航菜单
@@ -313,6 +314,7 @@ export default {
     // 获取用户的个人信息
     async getUserInfo() {
       const { data: res } = await getUserInfoApi()
+      window.sessionStorage.setItem('userInfo', JSON.stringify(res.data.user))
       this.ruleForm.mobile = res.data.user.mobile
     },
     // 修改密码功能

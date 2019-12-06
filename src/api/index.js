@@ -137,3 +137,18 @@ export const editCategoryApi = params => {
 export const contractManageApi = params => {
   return axios.get('/sys/contract/list?type=' + params.type + '&title=' + params.title + '&page=' + params.page + '&size=' + params.size)
 }
+
+// 新增合同
+export const addContractApi = params => {
+  return axios.post('/sys/contract/save', params)
+}
+
+// 确认合同
+export const agreeContractApi = params => {
+  return axios.post('/sys/contract/confirm', params)
+}
+
+// 删除合同
+export const delContractApi = params => {
+  return axios.post('/sys/contract/delete', params)
+}
