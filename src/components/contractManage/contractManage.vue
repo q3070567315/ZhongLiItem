@@ -22,15 +22,15 @@
             <el-button type="primary" @click="contractManage()">查询</el-button>
           </el-col>
           <el-col :span="18">
-            <el-button type="primary" class="edit_btn" @click="dialogVisible = true">修改</el-button>
+            <el-button type="primary" class="edit_btn" @click="editContractData()">修改</el-button>
           </el-col>
           <el-col :span="1">
             <el-button type="primary" class="add_btn" @click="dialogVisible = true">添加</el-button>
           </el-col>
         </el-row>
-        <!-- 物料定义表格区 -->
+        <!-- 合同列表表格区 -->
         <el-row>
-          <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%">
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="title" label="合同信息" sortable width="369"></el-table-column>
             <el-table-column prop="" label="项目名称" sortable width="240"></el-table-column>
@@ -83,7 +83,6 @@
                   <el-form-item>
                     <p>客户目录: </p><el-input v-model="contractForm.mulu" clearable autocomplete="off"></el-input>
                   </el-form-item>
-                  <!-- 导入富文本 -->
                   <h5>商品信息<a @click="dialogShopInfo = true">新增</a></h5>
                     <el-table :data="shopInfo" height="194" border style="width: 100%">
                       <el-table-column prop="productId" label="商品id" width="100"></el-table-column>
@@ -94,6 +93,7 @@
                       <el-table-column prop="number" label="库存量" width="100"></el-table-column>
                       <el-table-column prop="num" label="物料编码"></el-table-column>
                     </el-table>
+                  <!-- 导入富文本 -->
                   <h5>合同条款<a>新增</a></h5><quill-editor v-model="contractForm.content" :options="editorOption"></quill-editor>
                   <h5>联系方式</h5>
                   <div class="contact">
@@ -166,10 +166,63 @@
           </el-dialog>
         </div>
       </template>
+      <!-- 修改合同弹出框 -->
+      <template>
+        <div>
+          <el-dialog title="合同明细" :visible.sync="editDialog" :close-on-click-modal="false">
+            <h4>基本信息<a href="javascript:;">打印</a></h4>
+            <section>
+              <!-- 商品信息表单 -->
+              <el-form :model="editContractForm" :rules="rules" ref="ruleForm">
+                  <el-form-item prop="pic" class="formImg">
+                    <p>标题: </p><el-input v-model="editContractForm.title" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="title" class="shopFullName">
+                    <p>合同编号: </p><el-input v-model="editContractForm.num" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <p>客户目录: </p><el-input v-model="editContractForm.mulu" clearable autocomplete="off"></el-input>
+                  </el-form-item>
+                  <h5>商品信息<a @click="dialogShopInfo = true">新增</a></h5>
+                    <el-table :data="shopInfo" height="194" border style="width: 100%">
+                      <el-table-column prop="productId" label="商品id" width="100"></el-table-column>
+                      <el-table-column prop="name" label="商品名称" width="150"></el-table-column>
+                      <el-table-column prop="rate" label="税率" width="80"></el-table-column>
+                      <el-table-column prop="price" label="价格" width="100"></el-table-column>
+                      <el-table-column prop="date" label="价格有效期" width="130"></el-table-column>
+                      <el-table-column prop="number" label="库存量" width="100"></el-table-column>
+                      <el-table-column prop="num" label="物料编码"></el-table-column>
+                    </el-table>
+                  <!-- 导入富文本 -->
+                  <h5>合同条款<a>新增</a></h5><quill-editor v-model="editContractForm.content" :options="editorOption"></quill-editor>
+                  <h5>联系方式</h5>
+                  <div class="contact">
+                    <p>甲方 </p><el-input v-model="editContractForm.fromCompany" clearable autocomplete="off"></el-input>
+                    <p>乙方 </p><el-input v-model="editContractForm.toCompany" clearable autocomplete="off"></el-input>
+                    <p>地址 </p><el-input v-model="editContractForm.fromAddress" clearable autocomplete="off"></el-input>
+                    <p>地址 </p><el-input v-model="editContractForm.toAddress" clearable autocomplete="off"></el-input>
+                    <p>电话 </p><el-input v-model="editContractForm.fromMobile" clearable autocomplete="off"></el-input>
+                    <p>电话 </p><el-input v-model="editContractForm.toMobile" clearable autocomplete="off"></el-input>
+                    <p>开户行 </p><el-input v-model="editContractForm.fromBank" clearable autocomplete="off"></el-input>
+                    <p>开户行 </p><el-input v-model="editContractForm.toBank" clearable autocomplete="off"></el-input>
+                    <p>代表签字 </p><el-input v-model="editContractForm.fromName" clearable autocomplete="off"></el-input>
+                    <p>代表签字 </p><el-input v-model="editContractForm.toName" clearable autocomplete="off"></el-input>
+                    <p>日期 </p><el-input v-model="editContractForm.fromSignDate" clearable autocomplete="off"></el-input>
+                    <p>日期 </p><el-input v-model="editContractForm.toSignDate" clearable autocomplete="off"></el-input>
+                  </div>
+              </el-form>
+            </section>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="editDialog = false">取消</el-button>
+              <el-button type="primary" @click="editContract()">修改</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </template>
     </div>
 </template>
 <script>
-import { contractManageApi, addContractApi, agreeContractApi, delContractApi } from '@/api'
+import { contractManageApi, addContractApi, agreeContractApi, delContractApi, getContractInfoApi, editContractApi } from '@/api'
 export default {
   data() {
     return {
@@ -201,6 +254,8 @@ export default {
       dialogVisible: false,
       // 新增商品信息框
       dialogShopInfo: false,
+      // 修改商品信息框
+      editDialog: false,
       // 新增校验
       rules: {
       },
@@ -227,7 +282,7 @@ export default {
       contractForm: {
         title: '',
         num: '',
-        toId: 0,
+        toId: 29,
         fromCompany: '',
         fromAddress: '',
         fromMobile: '',
@@ -250,6 +305,24 @@ export default {
         date: '',
         number: '',
         num: ''
+      },
+      // 修改合同弹出框数据
+      editContractForm: {
+        title: '',
+        num: '',
+        toId: 0,
+        fromCompany: '',
+        fromAddress: '',
+        fromMobile: '',
+        fromName: '',
+        fromSignDate: '',
+        fromBank: '',
+        toCompany: '',
+        toAdress: '',
+        toMobile: '',
+        toSignDate: '',
+        toBank: '',
+        productList: []
       }
     }
   },
@@ -257,7 +330,7 @@ export default {
     this.contractManage()
   },
   methods: {
-    // 获取物料展示数据
+    // 获取合同展示数据
     async contractManage() {
       const { data: res } = await contractManageApi(this.contractManageData)
       // 获取表单数据
@@ -275,12 +348,9 @@ export default {
       this.currentPage = val
       this.contractManage()
     },
-    // 获取每行数据
-    handleSelectionChange(val) {
-      console.log(val)
-    },
     // 删除选中状态的数据
     delContract() {
+      if (this.$refs.multipleTable.selection.length === 0) return this.$message.error('请勾选需要删除的合同!')
       this.$confirm('确定删除所选合同吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -288,7 +358,11 @@ export default {
       }).then(async () => {
         let idArr = []
         this.$refs.multipleTable.selection.forEach(res => {
+          // if (res.status === 1 && res.toId === this.userId) {
           idArr.push(res.id)
+          // } else {
+          //   return this.$message.error('只能删除自己创建且未被确认的合同')
+          // }
         })
         const { data: res } = await delContractApi(idArr)
         if (res.code !== 0) return this.$message.error('删除合同失败')
@@ -337,20 +411,66 @@ export default {
     // 新增合同
     async addContract() {
       this.contractForm.productList = this.shopInfo
-      console.log(this.contractForm)
       const { data: res } = await addContractApi(this.contractForm)
-      if (res.code !== 0) return this.$$message.error('添加商品失败,请重试!')
+      if (res.code !== 0) return this.$message.error('添加商品失败,请重试!')
       this.$message({
         message: '添加商品成功!',
         type: 'success'
       })
       this.contractManage()
       this.dialogVisible = false
+      this.contractForm = {
+        title: '',
+        num: '',
+        toId: 29,
+        fromCompany: '',
+        fromAddress: '',
+        fromMobile: '',
+        fromName: '',
+        fromSignDate: '',
+        fromBank: '',
+        toCompany: '',
+        toAdress: '',
+        toMobile: '',
+        toSignDate: '',
+        toBank: '',
+        productList: []
+      }
+      this.shopInfo = []
     },
     // 合同确认
     async agreeContract(id) {
       const { data: res } = await agreeContractApi(id)
       console.log(res)
+    },
+    // 修改合同数据渲染
+    async editContractData() {
+      if (this.$refs.multipleTable.selection.length === 1) {
+        let contract = this.$refs.multipleTable.selection[0]
+        // if (contract.status === 1 && contract.formId === this.userId) {
+        const { data: res } = await getContractInfoApi(contract.id)
+        console.log(res.data.contract)
+        this.editContractForm = res.data.contract
+        this.shopInfo = res.data.contract.productList
+        this.editDialog = true
+        // } else {
+        //   return this.$message.error('只能修改自己创建且未被确认的合同')
+        // }
+      } else {
+        return this.$message.error('只能同时勾选一个需要修改的合同')
+      }
+    },
+    // 修改合同
+    async editContract() {
+      this.editContractForm.productList = this.shopInfo
+      const { data: res } = await editContractApi(this.editContractForm)
+      if (res.code !== 0) return this.$message.error('修改商品失败,请重试!')
+      this.$message({
+        message: '修改商品成功!',
+        type: 'success'
+      })
+      this.editDialog = false
+      this.contractManage()
     }
   }
 }

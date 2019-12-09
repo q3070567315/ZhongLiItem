@@ -152,3 +152,33 @@ export const agreeContractApi = params => {
 export const delContractApi = params => {
   return axios.post('/sys/contract/delete', params)
 }
+
+// 合同详情
+export const getContractInfoApi = params => {
+  return axios.get('/sys/contract/info?id=' + params)
+}
+
+// 修改合同
+export const editContractApi = params => {
+  return axios.post('/sys/contract/update', params)
+}
+
+// 专家列表
+export const getExpertListApi = params => {
+  return axios.get('/sys/expert/list?search=' + params.search + '&page=' + params.page + '&size=' + params.size)
+}
+
+// 新增专家
+export const addExpertApi = params => {
+  return axios.post('/sys/expert/save', params)
+}
+
+// 删除专家
+export const delExpertApi = params => {
+  return axios.post('/sys/expert/save', params)
+}
+
+// 修改专家
+export const editExpertApi = params => {
+  return axios.post('/sys/expert/save', params)
+}

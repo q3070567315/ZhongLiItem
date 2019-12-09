@@ -170,7 +170,6 @@ export default {
         return treeData
       }
       this.allMenuData = setTreeData(data1)
-      console.log(this.allMenuData)
     },
     // 单选按钮触发事件(新增菜单)
     radiosChange() {
@@ -185,7 +184,6 @@ export default {
     // 单选按钮触发事件(修改菜单)
     radiosChange2() {
       let inputElm2 = this.$refs.parentId2.$el
-      console.log(inputElm2)
       if (this.menuDetail.type === 0) {
         this.menuDetail.parentId = 0
         inputElm2.style.display = 'none'
@@ -195,7 +193,6 @@ export default {
     },
     // 新增菜单
     async addMenuItem() {
-      console.log(this.ruleForm)
       const { data: res } = await addMenuItemApi(this.ruleForm)
       if (res.code !== 0) return this.$message.error(res.msg)
       this.$message({

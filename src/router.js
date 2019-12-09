@@ -13,6 +13,7 @@ import MatterCategory from './components/matterManage/matterCategory.vue'
 import MatterDefine from './components/matterManage/matterDefine.vue'
 import MenuManage from './components/menuRule/menuManage.vue'
 import ContractManage from './components/contractManage/contractManage.vue'
+import ExpertMaintain from './components/expertManage/expertMaintain.vue'
 import Lunzi from './components/lunzi.vue'
 import Lunzi2 from './components/lunzi2.vue'
 Vue.use(Router)
@@ -81,6 +82,11 @@ const router = new Router({
     {
       path: '/contractManage',
       component: ContractManage
+    },
+    // 专家维护
+    {
+      path: '/expertMaintain',
+      component: ExpertMaintain
     },
     // 轮子
     {
