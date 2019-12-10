@@ -11,9 +11,10 @@ import OnlineConfirmation from './components/collProcurement/onlineConfirmation.
 import InvoiceInforConfirm from './components/collProcurement/invoiceInforConfirm.vue'
 import MatterCategory from './components/matterManage/matterCategory.vue'
 import MatterDefine from './components/matterManage/matterDefine.vue'
-import MenuManage from './components/menuRule/menuManage.vue'
 import ContractManage from './components/contractManage/contractManage.vue'
 import ExpertMaintain from './components/expertManage/expertMaintain.vue'
+import MenuManage from './components/systemManange/menuManage.vue'
+import RuleManage from './components/systemManange/roleManage.vue'
 import Lunzi from './components/lunzi.vue'
 import Lunzi2 from './components/lunzi2.vue'
 Vue.use(Router)
@@ -73,11 +74,6 @@ const router = new Router({
       path: '/matterDefine',
       component: MatterDefine
     },
-    // 菜单管理
-    {
-      path: '/menuManage',
-      component: MenuManage
-    },
     // 合同管理
     {
       path: '/contractManage',
@@ -87,6 +83,16 @@ const router = new Router({
     {
       path: '/expertMaintain',
       component: ExpertMaintain
+    },
+    // 菜单管理
+    {
+      path: '/menuManage',
+      component: MenuManage
+    },
+    // 角色管理
+    {
+      path: '/ruleManage',
+      component: RuleManage
     },
     // 轮子
     {

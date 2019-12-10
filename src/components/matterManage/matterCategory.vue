@@ -70,7 +70,7 @@
                     <p>分类编码: </p><el-input v-model="branchInfoForm.num" clearable autocomplete="off"></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <p>父级分类</p><el-cascader @change="handlerValue2" ref="refHandle2" :options="matterData" :props="defaultData" clearable v-model="branchInfoForm.parentId" placeholder="请选择父级分类(没有则不选)"></el-cascader>
+                    <p>父级分类</p><el-cascader @change="handlerValue2" ref="refHandle2" :options="matterData" :props="defaultData" v-model="branchInfoForm.parentId" placeholder="请选择父级分类(没有则不选)"></el-cascader>
                   </el-form-item>
                   <el-form-item>
                     <p>说明: </p><el-input v-model="branchInfoForm.remark" clearable autocomplete="off" type="textarea"></el-input>
@@ -136,16 +136,10 @@ export default {
       if (this.$refs.refHandle) {
         this.$refs.refHandle.dropDownVisible = false
       }
-      this.$refs.refHandle.clearValue(() => {
-        console.log(123)
-      })
     },
     handlerValue2() {
       if (this.$refs.refHandle2) {
         this.$refs.refHandle2.dropDownVisible = false
-      } else {
-        console.log(this.branchInfoForm)
-        this.branchInfoForm.parentId = 0
       }
     },
     // 获取物料分类数据

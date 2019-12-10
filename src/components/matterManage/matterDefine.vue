@@ -164,11 +164,11 @@
                         class="avatar-uploader"
                         action="http://apisrm.soolcool.com/sys/common/upload-pic"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :on-remove="handleRemove"
+                        :on-success="handleAvatarSuccess2"
+                        :on-remove="handleRemove2"
                         :before-upload="beforeAvatarUpload">
                         <img v-if="shopInfoData.pic" :src="shopInfoData.pic" class="avatar">
-                        <span v-if="shopInfoData.pic" class="el-upload-action" @click.stop="handleRemove()">
+                        <span v-if="shopInfoData.pic" class="el-upload-action" @click.stop="handleRemove2()">
                             <i class="el-icon-delete"></i>
                         </span>
                         <i v-else class="el-icon-upload2 avatar-uploader-icon" stop></i>
@@ -392,12 +392,19 @@ export default {
     },
     // 移除图片
     handleRemove() {
-      // this.files = []
       this.shopForm.pic = ''
+    },
+    // 移除图片(修改状态)
+    handleRemove2() {
+      this.shopInfoData.pic = ''
     },
     // 图片上传成功回调
     handleAvatarSuccess(res, file) {
       this.shopForm.pic = file.response.data.url
+    },
+    // 图片上传成功回调(修改状态)
+    handleAvatarSuccess2(res, file) {
+      this.shopInfoData.pic = file.response.data.url
     },
     // 上传前格式和图片大小限制
     beforeAvatarUpload(file) {

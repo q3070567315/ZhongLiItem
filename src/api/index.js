@@ -175,10 +175,20 @@ export const addExpertApi = params => {
 
 // 删除专家
 export const delExpertApi = params => {
-  return axios.post('/sys/expert/save', params)
+  return axios.post('/sys/expert/delete', params)
+}
+
+// 获取专家详情
+export const getExpertInfoApi = params => {
+  return axios.get('/sys/expert/info?id=' + params)
 }
 
 // 修改专家
 export const editExpertApi = params => {
-  return axios.post('/sys/expert/save', params)
+  return axios.post('/sys/expert/update', params)
+}
+
+// 获取角色列表
+export const getRoleListApi = params => {
+  return axios.get('/sys/role/list?search=' + params.search + '&page=' + params.page + '&size=' + params.size)
 }
