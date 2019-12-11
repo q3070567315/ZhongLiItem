@@ -1,5 +1,5 @@
 <template>
-    <div class="contractManage_content">
+    <div class="roleManage_content">
       <!-- 卡片视图区 -->
       <el-card>
         <el-row class="layout_row">
@@ -21,11 +21,11 @@
             <el-table-column prop="roleId" label="角色id" sortable width="169"></el-table-column>
             <el-table-column prop="roleName" label="角色名称" sortable width="320"></el-table-column>
             <el-table-column prop="remark" label="备注" sortable width="511"></el-table-column>
-            <el-table-column prop="createTime" label="创建时间" sortable width="360"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间" sortable width="359"></el-table-column>
             <el-table-column label="操作" width="200">
               <template slot-scope="scope">
                 <!-- 修改角色 -->
-                <a class="el-icon-edit-outline"></a>
+                <a class="el-icon-edit-outline" @click="getRoleInfo(scope.row.roleId)"></a>
                 <!-- 删除角色 -->
                 <a class="el-icon-delete" @click="delRole([scope.row.roleId])"></a>
               </template>
@@ -43,10 +43,42 @@
           </el-pagination>
         </el-row>
       </el-card>
+      <!-- 添加角色展开框 -->
+      <template>
+        <div>
+          <el-dialog title="新增角色并为其分配权限" :visible.sync="dialogVisible" :close-on-click-modal="false">
+            <el-form :model="addRoleForm" :rules="rules" ref="ruleForm">
+              <p>角色名称: </p><el-input v-model="addRoleForm.roleName" placeholder="请输入角色名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+              <el-tree :data="allMenuData" show-checkbox node-key="menuId" :props="treeProps" ref="treeRef"></el-tree>
+              <p>备注 </p><el-input v-model="addRoleForm.remark" type="textarea"></el-input>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="addRole()">新 增</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </template>
+      <!-- 修改角色展开框 -->
+      <template>
+        <div>
+          <el-dialog title="修改角色信息" :visible.sync="editDialog" :close-on-click-modal="false">
+            <el-form :model="editRoleForm" :rules="rules" ref="ruleForm">
+              <p>角色名称: </p><el-input v-model="editRoleForm.roleName" placeholder="请输入角色名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+              <el-tree :data="allMenuData" show-checkbox node-key="menuId" :props="treeProps" ref="treeRef2" :default-checked-keys="editRoleForm.menuIdList"></el-tree>
+              <p>备注 </p><el-input v-model="editRoleForm.remark" type="textarea"></el-input>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="clearRoleInfo()">取 消</el-button>
+              <el-button type="primary" @click="editRoleInfo()">修 改</el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </template>
     </div>
 </template>
 <script>
-import { getRoleListApi, delRoleApi } from '@/api'
+import { getRoleListApi, delRoleApi, getAllMenuApi, addRoleApi, getRoleInfoApi, editRoleInfoApi } from '@/api'
 export default {
   data() {
     return {
@@ -68,11 +100,39 @@ export default {
         size: 7,
         // 合同名称
         search: ''
+      },
+      // 新增角色弹出框
+      dialogVisible: false,
+      // 修改角色弹出框
+      editDialog: false,
+      // 所有菜单列表
+      allMenuData: [],
+      treeProps: {
+        children: 'children',
+        label: 'name',
+        value: 'menuId'
+      },
+      // 新增角色数据
+      addRoleForm: {
+        roleName: '',
+        menuIdList: [],
+        remark: ''
+      },
+      // 修改角色数据
+      editRoleForm: {
+        roleId: '',
+        roleName: '',
+        menuIdList: [],
+        remark: ''
+      },
+      // 添加修改框校验
+      rules: {
       }
     }
   },
   created() {
     this.getRoleList()
+    this.getAllMenu()
   },
   methods: {
     // 获取角色列表
@@ -100,16 +160,80 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        console.log(id)
         const { data: res } = await delRoleApi(id)
         if (res.code !== 0) return this.$message.error('删除角色失败')
-        console.log(res)
         this.$message({
           type: 'success',
           message: '删除角色成功!'
         })
         this.getRoleList()
       })
+    },
+    // 获取所有菜单
+    async getAllMenu() {
+      const { data: res } = await getAllMenuApi()
+      let data1 = res.data.menuList
+      // 左侧菜单数据修改为树形结构
+      function setTreeData(arr) {
+        let map = {}
+        arr.forEach(i => {
+          map[i.menuId] = i
+        })
+        let treeData = []
+        arr.forEach(child => {
+          const mapItem = map[child.parentId]
+          if (mapItem) {
+            (mapItem.children || (mapItem.children = [])).push(child)
+          } else {
+            treeData.push(child)
+          }
+        })
+        return treeData
+      }
+      this.allMenuData = setTreeData(data1)
+    },
+    // 新增角色
+    async addRole() {
+      this.addRoleForm.menuIdList = this.$refs.treeRef.getCheckedKeys()
+      const { data: res } = await addRoleApi(this.addRoleForm)
+      if (res.code !== 0) return this.$message.error('添加角色失败!')
+      this.$message({
+        message: '添加角色成功!',
+        type: 'success'
+      })
+      this.getRoleList()
+      this.$refs.treeRef.setCheckedKeys([])
+      this.addRoleForm = {
+        roleName: '',
+        menuIdList: [],
+        remark: ''
+      }
+      this.dialogVisible = false
+    },
+    // 获取角色信息
+    async getRoleInfo(id) {
+      const { data: res } = await getRoleInfoApi(id)
+      if (res.code !== 0) return false
+      this.editRoleForm = res.data.role
+      this.editDialog = true
+    },
+    // 修改角色信息
+    async editRoleInfo() {
+      this.editRoleForm.menuIdList = this.$refs.treeRef2.getCheckedKeys()
+      const { data: res } = await editRoleInfoApi(this.editRoleForm)
+      if (res.code !== 0) return this.$message.error('修改角色信息失败!')
+      this.$message({
+        message: '修改角色信息成功!',
+        type: 'success'
+      })
+      this.$refs.treeRef2.setCheckedKeys([])
+      this.getRoleList()
+      this.editDialog = false
+    },
+    // 清除角色信息
+    clearRoleInfo() {
+      this.$refs.treeRef2.setCheckedKeys([])
+      this.editDialog = false
     }
   }
 }

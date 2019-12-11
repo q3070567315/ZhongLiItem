@@ -197,3 +197,18 @@ export const getRoleListApi = params => {
 export const delRoleApi = params => {
   return axios.post('/sys/role/delete', params)
 }
+
+// 新增角色
+export const addRoleApi = params => {
+  return axios.post('/sys/role/save', params)
+}
+
+// 获取角色详情
+export const getRoleInfoApi = params => {
+  return axios.get('/sys/role/info?id=' + params)
+}
+
+// 修改角色详情
+export const editRoleInfoApi = params => {
+  return axios.post('/sys/role/update', params)
+}

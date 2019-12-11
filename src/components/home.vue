@@ -35,7 +35,7 @@
                     <el-badge :value="200" :max="99">
                         <el-button class="el-icon-bell"></el-button>
                     </el-badge>
-                    <a href="javascript:;" class="iconfont icon-zhankai"></a>
+                    <a href="javascript:;" class="iconfont icon-move"></a>
                     <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
                             <img src="../assets/img/defaultHead.jpg" alt="">
@@ -434,7 +434,7 @@ export default {
     font-size: 14px;
 }
 .el_header_right a {
-    font-size: 18px;
+    font-size: 20px;
     margin-left: 30px;
     margin-right: 0;
 }

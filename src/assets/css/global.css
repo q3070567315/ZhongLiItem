@@ -181,6 +181,26 @@ div {
 .menuManage_contaner .el-form-item p {
     width: 90px;
 }
+/* 角色界面弹出框 */
+/* 菜单界面弹出框 */
+.roleManage_content .el-dialog {
+    width: 500px !important;
+    height: 500px;
+}
+.roleManage_content .el-dialog__body {
+    height: 360px !important;
+    overflow: auto;
+}
+.roleManage_content .el-dialog p {
+    margin-right: 10px;
+    display: inline-block;
+}
+.roleManage_content .el-dialog__footer {
+    padding: 10px;
+}
+.roleManage_content .el-dialog .el-input {
+    width: 350px;
+}
 /* 表单校验提示样式 */
 .el-form-item__error {
     font-weight: 400;

@@ -60,7 +60,7 @@
               <el-form-item prop="icon">
                   <p>图标: </p><el-input v-model="ruleForm.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
               </el-form-item>
-              <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标地址</a>(写入图标前加入iconfont icon-)</div>
+              <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标库</a>(写入前加入iconfont icon-)</div>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="newMenuVisible = false">返 回</el-button>
@@ -96,12 +96,12 @@
               <el-form-item prop="icon">
                   <p>图标: </p><el-input v-model="menuDetail.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
               </el-form-item>
-              <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标地址</a>(写入图标前加入iconfont icon-)</div>
+              <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标库</a>(写入前加入iconfont icon-)</div>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="editMenuVisible = false">返 回</el-button>
+                <el-button type="primary" @click="editMenuItem()">修 改</el-button>
+              </span>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="editMenuVisible = false">返 回</el-button>
-              <el-button type="primary" @click="editMenuItem()">修 改</el-button>
-            </span>
           </el-dialog>
         </div>
       </template>
@@ -304,14 +304,17 @@ export default {
   font-weight: 400;
 }
 .tipsInfo {
-  margin: -15px 0 0 100px;
+  margin: -5px 0 0 100px;
   padding-left: 20px;
   height: 30px;
-  width: 300px;
+  width: 280px;
   background-color: #F9F2F4;
   border-radius: 4px;
   line-height: 30px;
-  color: #fff;
+  color: #FF838C;
+}
+.el-form-item {
+  margin-bottom: 12px;
 }
 .tipsInfo a {
   color: #C7254E;
