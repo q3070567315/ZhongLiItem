@@ -60,6 +60,7 @@
               <el-form-item prop="icon">
                   <p>图标: </p><el-input v-model="ruleForm.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
               </el-form-item>
+              <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标地址</a>(写入图标前加入iconfont icon-)</div>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="newMenuVisible = false">返 回</el-button>
@@ -95,6 +96,7 @@
               <el-form-item prop="icon">
                   <p>图标: </p><el-input v-model="menuDetail.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
               </el-form-item>
+              <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标地址</a>(写入图标前加入iconfont icon-)</div>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="editMenuVisible = false">返 回</el-button>
@@ -300,5 +302,18 @@ export default {
   border-radius: 3px;
   color: #fff;
   font-weight: 400;
+}
+.tipsInfo {
+  margin: -15px 0 0 100px;
+  padding-left: 20px;
+  height: 30px;
+  width: 300px;
+  background-color: #F9F2F4;
+  border-radius: 4px;
+  line-height: 30px;
+  color: #fff;
+}
+.tipsInfo a {
+  color: #C7254E;
 }
 </style>

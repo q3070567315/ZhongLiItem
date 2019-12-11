@@ -381,6 +381,11 @@ export default {
     width: 220px;
     min-height: 400px;
 }
+.el-menu i {
+  margin-right: 5px;
+  font-size: 20px;
+  color: #fff;
+}
 .el-dropdown-menu__item {
   width: 96px;
 }

@@ -8,11 +8,8 @@
             <el-input placeholder="角色名称" clearable v-model="roleManageData.search">
             </el-input>
           </el-col>
-          <el-col :span="18">
+          <el-col :span="20">
             <el-button type="primary" @click="getRoleList()">查询</el-button>
-          </el-col>
-          <el-col :span="2">
-            <el-button type="primary" class="edit_btn" @click="editContractData()">修改</el-button>
           </el-col>
           <el-col :span="1">
             <el-button type="primary" class="add_btn" @click="dialogVisible = true">添加</el-button>
@@ -26,11 +23,11 @@
             <el-table-column prop="remark" label="备注" sortable width="511"></el-table-column>
             <el-table-column prop="createTime" label="创建时间" sortable width="360"></el-table-column>
             <el-table-column label="操作" width="200">
-              <template>
-                <!-- 修改分类 -->
+              <template slot-scope="scope">
+                <!-- 修改角色 -->
                 <a class="el-icon-edit-outline"></a>
-                <!-- 删除分类 -->
-                <a class="el-icon-delete"></a>
+                <!-- 删除角色 -->
+                <a class="el-icon-delete" @click="delRole([scope.row.roleId])"></a>
               </template>
             </el-table-column>
           </el-table>
@@ -49,7 +46,7 @@
     </div>
 </template>
 <script>
-import { getRoleListApi } from '@/api'
+import { getRoleListApi, delRoleApi } from '@/api'
 export default {
   data() {
     return {
@@ -95,6 +92,24 @@ export default {
       this.roleManageData.page = val
       this.currentPage = val
       this.getRoleList()
+    },
+    // 删除角色
+    delRole(id) {
+      this.$confirm('确定删除该角色吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        console.log(id)
+        const { data: res } = await delRoleApi(id)
+        if (res.code !== 0) return this.$message.error('删除角色失败')
+        console.log(res)
+        this.$message({
+          type: 'success',
+          message: '删除角色成功!'
+        })
+        this.getRoleList()
+      })
     }
   }
 }

@@ -192,3 +192,8 @@ export const editExpertApi = params => {
 export const getRoleListApi = params => {
   return axios.get('/sys/role/list?search=' + params.search + '&page=' + params.page + '&size=' + params.size)
 }
+
+// 删除角色
+export const delRoleApi = params => {
+  return axios.post('/sys/role/delete', params)
+}
