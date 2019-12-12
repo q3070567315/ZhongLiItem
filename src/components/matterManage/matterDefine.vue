@@ -301,13 +301,25 @@ export default {
         }
       },
       // 商品详情数据
-      shopInfoData: []
+      shopInfoData: [],
+      // 获取当前浏览器的宽度
+      screenWidth: ''
     }
   },
   created() {
     this.getMatterList()
-    this.matterDefine()
     this.getMatterCustom()
+  },
+  mounted() {
+    this.screenWidth = document.body.clientWidth
+    if (this.screenWidth >= 1600) {
+      this.matterDefineData.size = 8
+    } else if (this.screenWidth >= 1440) {
+      this.matterDefineData.size = 6
+    } else {
+      this.matterDefineData.size = 4
+    }
+    this.matterDefine()
   },
   methods: {
     // 获取分页数据
@@ -499,10 +511,15 @@ export default {
 <style scoped lang='less'>
 .el-card {
   width: 100%;
-  height: 700px;
   background: rgba(255,255,255,1);
   border-radius: 3px;
   overflow: auto;
+  @media screen and (min-width: 1600px){
+    height: 700px;
+  }
+  @media screen and (min-width: 1440px) {
+    height: 100%;
+  }
 }
 .el-card .el-button {
   width:70px;

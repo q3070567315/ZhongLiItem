@@ -97,7 +97,7 @@ export default {
         // 当前页
         page: 1,
         // 当前页条数
-        size: 5,
+        size: 7,
         // 合同名称
         search: ''
       },
@@ -127,12 +127,24 @@ export default {
       },
       // 添加修改框校验
       rules: {
-      }
+      },
+      // 获取当前浏览器的宽度
+      screenWidth: ''
     }
   },
   created() {
-    this.getRoleList()
     this.getAllMenu()
+  },
+  mounted() {
+    this.screenWidth = document.body.clientWidth
+    if (this.screenWidth >= 1600) {
+      this.roleManageData.size = 7
+    } else if (this.screenWidth >= 1440) {
+      this.roleManageData.size = 6
+    } else {
+      this.roleManageData.size = 5
+    }
+    this.getRoleList()
   },
   methods: {
     // 获取角色列表
@@ -140,11 +152,11 @@ export default {
       const { data: res } = await getRoleListApi(this.roleManageData)
       // 获取表单数据
       this.tableData = res.data.page.list
-      // 获取当前页面
+      // 展示当前页面
       this.currentPage = res.data.page.currPage
-      // 获取页面总页数
+      // 展会页面总页数
       this.totalNum = res.data.page.totalPage
-      // 获取总条数
+      // 展示总条数
       this.total = res.data.page.totalCount
     },
     // 当前页数据动态改变
@@ -241,9 +253,17 @@ export default {
 <style scoped lang='less'>
 .el-card {
   width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,1);
+  background: #fff;
   border-radius: 3px;
+  @media screen and (min-width: 1600px){
+    height: 700px;
+  }
+  @media screen and (min-width: 1440px) and (max-width: 1600px) {
+    height: 600px;
+  }
+  @media screen and (max-width: 1440px) {
+    height: 100%;
+  }
 }
 .el-card .el-button {
   margin-left: 20px;

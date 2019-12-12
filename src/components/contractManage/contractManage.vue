@@ -323,10 +323,23 @@ export default {
         toSignDate: '',
         toBank: '',
         productList: []
-      }
+      },
+      // 获取当前浏览器的宽度
+      screenWidth: ''
     }
   },
   created() {
+    this.contractManage()
+  },
+  mounted() {
+    this.screenWidth = document.body.clientWidth
+    if (this.screenWidth >= 1600) {
+      this.contractManageData.size = 7
+    } else if (this.screenWidth >= 1440) {
+      this.contractManageData.size = 5
+    } else {
+      this.contractManageData.size = 4
+    }
     this.contractManage()
   },
   methods: {
@@ -478,9 +491,17 @@ export default {
 <style scoped lang='less'>
 .el-card {
   width: 100%;
-  height: 700px;
   background: rgba(255,255,255,1);
   border-radius: 3px;
+  @media screen and (min-width: 1600px){
+    height: 700px;
+  }
+  @media screen and (min-width: 1440px) and (max-width: 1600px) {
+    height: 600px;
+  }
+  @media screen and (max-width: 1440px) {
+    height: 100%;
+  }
 }
 .el-card .el-button {
   width:70px;

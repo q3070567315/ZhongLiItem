@@ -223,10 +223,18 @@ export default {
 <style scoped lang='less'>
 .el-card {
   width: 100%;
-  height: 700px;
   background:rgba(255,255,255,1);
   border-radius:3px;
   overflow: auto;
+  @media screen and (min-width: 1600px){
+    height: 700px;
+  }
+  @media screen and (min-width: 1440px) and (max-width: 1600px) {
+    height: 600px;
+  }
+  @media screen and (max-width: 1440px) {
+    height: 100%;
+  }
 }
 .el-card .el-button {
   width:70px;
