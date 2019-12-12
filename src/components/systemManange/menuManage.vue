@@ -97,11 +97,11 @@
                   <p>图标: </p><el-input v-model="menuDetail.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
               </el-form-item>
               <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标库</a>(写入前加入iconfont icon-)</div>
-              <span slot="footer" class="dialog-footer">
-                <el-button @click="editMenuVisible = false">返 回</el-button>
-                <el-button type="primary" @click="editMenuItem()">修 改</el-button>
-              </span>
             </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="editMenuVisible = false">返 回</el-button>
+              <el-button type="primary" @click="editMenuItem()">修 改</el-button>
+            </span>
           </el-dialog>
         </div>
       </template>

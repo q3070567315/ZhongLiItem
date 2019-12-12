@@ -70,7 +70,7 @@ div {
     border-radius: 0;
 }
 ::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(135deg, #3C8DBC 0%, #eee 50%, #3C8DBC 100%);
+    background-image: linear-gradient(135deg, #3C8DBC 0%, #eee 100%);
     transition: all .2s;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -166,6 +166,9 @@ div {
 .home_contaner .el-form-item .el-input {
     width: 299px;
 }
+.home_contaner .el-dialog__footer {
+    padding: 10px;
+}
 /* 菜单界面弹出框 */
 .menuManage_contaner .el-dialog {
     width: 500px !important;
@@ -180,6 +183,9 @@ div {
 }
 .menuManage_contaner .el-form-item p {
     width: 90px;
+}
+.menuManage_contaner .el-dialog__footer {
+    padding: 10px;
 }
 /* 角色界面弹出框 */
 /* 菜单界面弹出框 */

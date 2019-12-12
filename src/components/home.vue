@@ -35,7 +35,7 @@
                     <el-badge :value="200" :max="99">
                         <el-button class="el-icon-bell"></el-button>
                     </el-badge>
-                    <a href="javascript:;" class="iconfont icon-move"></a>
+                    <a class="iconfont icon-move" @click="screenfull()"></a>
                     <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
                             <img src="../assets/img/defaultHead.jpg" alt="">
@@ -142,6 +142,7 @@
 </template>
 <script>
 import { logoutApi, getNavMenuApi, sendVerificationApi, getUserInfoApi, changePasswordApi } from '@/api'
+import screenfull from 'screenfull'
 export default {
   data() {
     // 部分校验(密码校验)
@@ -198,12 +199,23 @@ export default {
       // 左侧导航菜单
       navMenu: [],
       // 控制是否弹出修改密码框
-      dialogVisible: false
+      dialogVisible: false,
+      // 控制是否全屏
+      isFullscreen: false
     }
   },
   created() {
     this.getNavMenu()
     this.getUserInfo()
+  },
+  mounted() {
+    window.onresize = () => {
+      // 全屏下监控是否按键了ESC
+      if (!this.checkFull()) {
+        // 退出全屏
+        this.isFullscreen = false
+      }
+    }
   },
   methods: {
     // 隐藏侧边栏
@@ -241,7 +253,7 @@ export default {
               activeName = nextTab.name
               this.$router.push(nextTab.url)
             } else {
-              this.$router.push('/index')
+              this.$router.push('home')
               window.location.reload()
             }
           }
@@ -330,6 +342,26 @@ export default {
     // 侧边栏激活触发事件
     asideChange(index, res, e) {
       this.addTab(this.editableTabsValue, e._vnode.elm.innerText, index)
+    },
+    // 全屏模式
+    screenfull() {
+      if (screenfull.enabled) {
+        this.$message({
+          message: '您的浏览器无法进入全屏模式',
+          type: 'warning'
+        })
+        return false
+      }
+      screenfull.toggle()
+      this.isFullscreen = true
+    },
+    // Esc 全屏监测
+    checkFull() {
+      let isFull = document.fullscreenEnabled || window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled
+      if (isFull === undefined) {
+        isFull = false
+      }
+      return isFull
     }
   }
 }
