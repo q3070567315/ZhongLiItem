@@ -13,44 +13,44 @@
         </el-row>
         <!-- 内容搜索区 -->
         <el-row :gutter="20">
-          <el-col :span="3">
+          <el-col :span="4">
             <el-cascader ref="refHandles" :options="matterCustomData" :props="defaultData" clearable  placeholder="选择分类" v-model="matterDefineData.typeId" @change="handleChange"></el-cascader>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="4">
             <el-input placeholder="商品名称" clearable v-model="matterDefineData.name">
             </el-input>
           </el-col>
           <el-col :span="2">
             <el-button type="primary" @click="matterDefine()">查询</el-button>
           </el-col>
-          <el-col :span="16">
+          <el-col :span="14">
             <el-button type="primary" class="add_btn" @click="dialogVisible = true">添加</el-button>
           </el-col>
         </el-row>
         <!-- 物料定义表格区 -->
         <el-row>
-            <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" @selection-change="handleSelectionChange">
-              <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="商品图片" width="138">
+            <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" show-overflow-tooltip :default-sort = "{prop: 'date', order: 'descending'}" @selection-change="handleSelectionChange">
+              <el-table-column type="selection" width="36" show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column label="商品图片" min-width="8%" align="center">
                 <template slot-scope="scope">
                   <img v-if="scope.row.pic !== ''" :src="scope.row.pic">
                   <img v-else src="../../assets/img/defaultHead.jpg">
                 </template>
               </el-table-column>
-              <el-table-column prop="id" label="商品id" sortable width="111"></el-table-column>
-              <el-table-column prop="name" label="商品名称" sortable width="220"></el-table-column>
-              <el-table-column prop="num" label="商品编码" sortable width="140"></el-table-column>
-              <el-table-column prop="typeName" label="所属分类" sortable width="200"></el-table-column>
-              <el-table-column prop="createTime" label="到期时间" sortable width="200"></el-table-column>
-              <el-table-column prop="unit" label="计量单位" sortable width="160"></el-table-column>
-              <el-table-column label="状态" width="200">
+              <el-table-column prop="id" label="商品id" sortable min-width="10%" show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column prop="name" label="商品名称" min-width="10%" show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column prop="num" label="商品编码" sortable min-width="11%"  show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column prop="typeName" label="所属分类" min-width="10%" show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column prop="createTime" label="到期时间" sortable min-width="12%" show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column prop="unit" label="单位" min-width="6%" show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column label="状态" min-width="10%" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                   <div v-if="scope.row.status === 1"><p></p>未锁定</div>
                   <div v-else-if="scope.row.status === 2"><p style="background-color: #409EFF;"></p>锁定</div>
                   <div v-else><p  style="background-color: #F56C6C;"></p>已停用</div>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="150">
+              <el-table-column label="操作" min-width="14%">
                 <template slot-scope="scope">
                   <!-- 1.未启用状态 -->
                   <!-- 修改 -->
@@ -498,10 +498,11 @@ export default {
 </script>
 <style scoped lang='less'>
 .el-card {
-  width:1600px;
+  width: 100%;
   height: 700px;
   background: rgba(255,255,255,1);
   border-radius: 3px;
+  overflow: auto;
 }
 .el-card .el-button {
   width:70px;
@@ -544,7 +545,7 @@ export default {
   display: flex;
 }
 .el-table .cell p {
-  margin: 8px 19px;
+  margin: 8px 10px;
   width: 8px;
   height: 8px;
   background-color: #B7B7B7;
@@ -556,6 +557,7 @@ export default {
   cursor: pointer;
 }
 .el-table .cell img {
+  margin: 0 auto;
   display: block;
   width: 33px;
   height: 33px;

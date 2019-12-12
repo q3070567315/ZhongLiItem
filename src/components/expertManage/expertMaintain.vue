@@ -5,11 +5,11 @@
     <el-card>
       <!-- 内容搜索区 -->
       <el-row :gutter="20">
-        <el-col :span="3">
+        <el-col :span="4">
             <el-input placeholder="专家名称" clearable v-model="expertMaintainData.search">
             </el-input>
         </el-col>
-        <el-col :span="19">
+        <el-col :span="18">
             <el-button type="primary"  @click="getExpertList()">查询</el-button>
         </el-col>
         <el-col :span="2">
@@ -20,13 +20,13 @@
       <el-row>
         <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%">
           <el-table-column type="selection" width="40"></el-table-column>
-          <el-table-column prop="name" label="姓名" sortable width="300"></el-table-column>
-          <el-table-column prop="sex" label="性别" sortable width="200"></el-table-column>
-          <el-table-column prop="companyAddress" label="地址" sortable width="409"></el-table-column>
-          <el-table-column prop="" label="产品" sortable width="200"></el-table-column>
-          <el-table-column prop="status" label="状态" width="260">
+          <el-table-column prop="name" label="姓名" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="sex" label="性别" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="companyAddress" label="地址" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="" label="产品" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="status" label="状态" min-width="20%" show-overflow-tooltip>
           </el-table-column>
-          <el-table-column label="操作" width="150">
+          <el-table-column label="操作" min-width="20%" show-overflow-tooltip>
             <template slot-scope="scope">
               <div><a style="color: #409EFF; font-size: 14px" @click="getExpertInfo(scope.row.id)">编辑</a><a style="color: #409EFF; font-size: 14px" @click="delExpert([scope.row.id])">删除</a></div>
             </template>
@@ -393,7 +393,7 @@ export default {
 </script>
 <style scoped lang='less'>
 .el-card {
-  width:1600px;
+  width: 100%;
   height: 700px;
   background: rgba(255,255,255,1);
   border-radius: 3px;
@@ -413,7 +413,6 @@ export default {
   width: 80px;
   height: 34px;
   background: rgba(255,255,255,1);
-  border: 1px solid rgba(220,220,220,1);
   border-radius: 3px;
   color: #666;
   line-height: 0

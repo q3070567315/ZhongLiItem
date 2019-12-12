@@ -370,7 +370,7 @@ export default {
 .home_contaner {
     display: flex;
     height: 100%;
-    min-width: 1900px;
+    min-width: 1200px;
 }
 // 侧边栏
 .el-aside {

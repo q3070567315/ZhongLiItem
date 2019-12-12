@@ -1,4 +1,4 @@
-//  合同管理
+//  合同列表
 <template>
     <div class="contractManage_content">
       <!-- 卡片视图区 -->
@@ -14,14 +14,14 @@
         </el-row>
         <!-- 内容搜索区 -->
         <el-row :gutter="20">
-          <el-col :span="3">
+          <el-col :span="4">
             <el-input placeholder="合同名称" clearable v-model="contractManageData.title">
             </el-input>
           </el-col>
           <el-col :span="2">
             <el-button type="primary" @click="contractManage()">查询</el-button>
           </el-col>
-          <el-col :span="18">
+          <el-col :span="17">
             <el-button type="primary" class="edit_btn" @click="editContractData()">修改</el-button>
           </el-col>
           <el-col :span="1">
@@ -32,18 +32,18 @@
         <el-row>
           <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%">
             <el-table-column type="selection" width="40"></el-table-column>
-            <el-table-column prop="title" label="合同信息" sortable width="369"></el-table-column>
-            <el-table-column prop="" label="项目名称" sortable width="240"></el-table-column>
-            <el-table-column prop="" label="合同详情" sortable width="300"></el-table-column>
-            <el-table-column prop="finishTime" label="签订日期" sortable width="200"></el-table-column>
-            <el-table-column prop="status" label="状态" width="260">
+            <el-table-column prop="title" label="合同信息" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="" label="项目名称" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="" label="合同详情" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="finishTime" label="签订日期" sortable min-width="18%" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="status" label="状态" min-width="22%" show-overflow-tooltip>
               <template slot-scope="scope">
                   <div v-if="scope.row.status === 1 && scope.row.toId === userId"><p style="background-color: #FCED32;"></p>待我确认</div>
                   <div v-else-if="scope.row.status === 1 && scope.row.fromId === userId"><p style="background-color: #409EFF;"></p>待采购商确认</div>
                   <div v-if="scope.row.status === 2"><p style="background-color: #7FFF00;"></p>已确认</div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="150">
+            <el-table-column label="操作" min-width="20%" show-overflow-tooltip>
               <template slot-scope="scope">
                 <div v-if="scope.row.status === 1 && scope.row.toId === userId"><a style="color: #409EFF; font-size: 14px" @click="agreeContract(scope.row.id)">确认</a></div>
                 <div v-else-if="scope.row.status === 1 && scope.row.fromId === userId"><a style="color: #409EFF; font-size: 14px; cursor: default;">采购商确认</a></div>
@@ -477,7 +477,7 @@ export default {
 </script>
 <style scoped lang='less'>
 .el-card {
-  width:1600px;
+  width: 100%;
   height: 700px;
   background: rgba(255,255,255,1);
   border-radius: 3px;
@@ -494,14 +494,13 @@ export default {
   width: 80px;
   height: 34px;
   background: rgba(255,255,255,1);
-  border: 1px solid rgba(220,220,220,1);
   border-radius: 3px;
   color: #666;
   line-height: 0
 }
 .el-card .edit_btn {
+  margin-right: 40px;
   float: right;
-  margin-right: 20px;
 }
 .el-card .add_btn {
   float: right;
@@ -527,7 +526,7 @@ export default {
   display: flex;
 }
 .el-table .cell p {
-  margin: 8px 19px;
+  margin: 8px 10px;
   width: 8px;
   height: 8px;
   background-color: #B7B7B7;

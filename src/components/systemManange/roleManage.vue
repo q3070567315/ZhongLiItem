@@ -2,7 +2,7 @@
     <div class="roleManage_content">
       <!-- 卡片视图区 -->
       <el-card>
-        <el-row class="layout_row">
+        <el-row>
           <!-- 操作按钮 -->
           <el-col :span="3">
             <el-input placeholder="角色名称" clearable v-model="roleManageData.search">
@@ -18,11 +18,11 @@
         <!-- 角色列表表格区 -->
         <el-row>
           <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%">
-            <el-table-column prop="roleId" label="角色id" sortable width="169"></el-table-column>
-            <el-table-column prop="roleName" label="角色名称" sortable width="320"></el-table-column>
-            <el-table-column prop="remark" label="备注" sortable width="511"></el-table-column>
-            <el-table-column prop="createTime" label="创建时间" sortable width="359"></el-table-column>
-            <el-table-column label="操作" width="200">
+            <el-table-column prop="roleId" label="角色id" sortable min-width="10%" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="roleName" label="角色名称" sortable min-width="25%" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="remark" label="备注" sortable min-width="35%" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTime" label="创建时间" sortable min-width="20%" show-overflow-tooltip></el-table-column>
+            <el-table-column label="操作" min-width="10%" show-overflow-tooltip>
               <template slot-scope="scope">
                 <!-- 修改角色 -->
                 <a class="el-icon-edit-outline" @click="getRoleInfo(scope.row.roleId)"></a>
@@ -97,7 +97,7 @@ export default {
         // 当前页
         page: 1,
         // 当前页条数
-        size: 7,
+        size: 5,
         // 合同名称
         search: ''
       },
@@ -240,8 +240,8 @@ export default {
 </script>
 <style scoped lang='less'>
 .el-card {
-  width:1600px;
-  height: 700px;
+  width: 100%;
+  height: 100%;
   background: rgba(255,255,255,1);
   border-radius: 3px;
 }
@@ -260,11 +260,12 @@ export default {
   float: right;
 }
 .layout_row {
+  height: 60px;
   position: relative;
 }
 .el-pagination {
   position: absolute;
-  top: 30px;
+  top: 20px;
   right: 0;
 }
 .el-table .cell a {

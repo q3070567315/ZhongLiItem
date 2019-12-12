@@ -17,19 +17,19 @@
                     <el-radio v-model="radioValue" :label="scope.row.menuId">&nbsp;</el-radio>
                 </template>
               </el-table-column>
-              <el-table-column prop="name" label="菜单名称" width="180"></el-table-column>
-              <el-table-column prop="menuId" label="菜单id" sortable width="110"></el-table-column>
-              <el-table-column prop="parentName" label="父级菜单" sortable width="180"></el-table-column>
-              <el-table-column prop="icon" label="图标" sortable width="249"></el-table-column>
-              <el-table-column prop="type" label="类型" sortable width="80">
+              <el-table-column prop="name" label="菜单名称" min-width="13%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="menuId" label="菜单id" sortable min-width="11%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="parentName" label="父级菜单" sortable min-width="13%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="icon" label="图标" sortable min-width="13%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="type" label="类型" sortable min-width="11%" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <div class="list" v-if="scope.row.type === 0">目 录</div>
                   <div class="menu" v-else>菜 单</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="orderNum" label="排序编号" sortable width="110"></el-table-column>
-              <el-table-column prop="url" label="菜单链接url" sortable width="350"></el-table-column>
-              <el-table-column prop="perms" label="授权编码"></el-table-column>
+              <el-table-column prop="orderNum" label="排序编号" sortable min-width="12%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="url" label="菜单链接url" sortable min-width="15%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="perms" label="授权编码" min-width="12%" show-overflow-tooltip></el-table-column>
             </el-table>
         </el-row>
       </el-card>
@@ -261,8 +261,8 @@ export default {
 </script>
 <style scoped lang='less'>
 .el-card {
-  width:1600px;
-  height:700px;
+  width: 100%;
+  height: 100%;
   background:rgba(255,255,255,1);
   border-radius:3px;
   overflow: auto;

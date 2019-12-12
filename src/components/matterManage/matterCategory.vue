@@ -12,10 +12,10 @@
         <!-- 物料分类表格区 -->
         <el-row>
             <el-table tooltip-effect="dark" ref="multipleTable" :data="matterData" border style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}" row-key="id" :tree-props="{children: 'childList', hasChildren: 'hasChildren'}" highlight-current-row>
-              <el-table-column prop="name" label="分类名称" width="438"></el-table-column>
-              <el-table-column prop="num" label="分类编码" sortable width="220"></el-table-column>
-              <el-table-column prop="remark" label="说明" sortable width="721"></el-table-column>
-              <el-table-column prop="" label="操作" width="180" class="operate">
+              <el-table-column prop="name" label="分类名称" min-width="20%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="num" label="分类编码" sortable min-width="30%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="remark" label="说明" sortable min-width="30%" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="" label="操作" class="operate" min-width="20%" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <!-- 修改分类 -->
                   <a class="el-icon-edit-outline" @click="editCategory(scope.row)"></a>
@@ -222,10 +222,11 @@ export default {
 </script>
 <style scoped lang='less'>
 .el-card {
-  width:1600px;
-  height:700px;
+  width: 100%;
+  height: 700px;
   background:rgba(255,255,255,1);
   border-radius:3px;
+  overflow: auto;
 }
 .el-card .el-button {
   width:70px;
