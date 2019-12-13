@@ -46,19 +46,19 @@
                   </el-radio-group>
               </el-form-item>
               <el-form-item prop="name">
-                  <p>新增菜单名称: </p><el-input v-model="ruleForm.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                  <p>新增菜单名称: </p><el-input v-model="ruleForm.name" placeholder="菜单名称" type="text" clearable autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item prop="parentId" ref="parentId" style="display: none">
                   <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="ruleForm.parentId" placeholder="请选择父级菜单"></el-cascader>
               </el-form-item>
               <el-form-item prop="url">
-                  <p>菜单跳转url: </p><el-input v-model="ruleForm.url" placeholder="菜单跳转url(没有则不填)" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>菜单跳转url: </p><el-input v-model="ruleForm.url" placeholder="菜单跳转url(没有则不填)" type="text" clearable></el-input>
               </el-form-item>
               <el-form-item prop="orderNum">
-                  <p>排序编号: </p><el-input v-model="ruleForm.orderNum" placeholder="请输入排序编号" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>排序编号: </p><el-input v-model="ruleForm.orderNum" placeholder="请输入排序编号" type="text" clearable></el-input>
               </el-form-item>
               <el-form-item prop="icon">
-                  <p>图标: </p><el-input v-model="ruleForm.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>图标: </p><el-input v-model="ruleForm.icon" placeholder="菜单图标" type="text" clearable></el-input>
               </el-form-item>
               <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标库</a>(写入前加入iconfont icon-)</div>
             </el-form>
@@ -82,19 +82,19 @@
                   </el-radio-group>
               </el-form-item>
               <el-form-item prop="name">
-                  <p>修改菜单名称: </p><el-input v-model="menuDetail.name" placeholder="菜单名称" type="text" prefix-icon="el-icon-search" clearable autocomplete="off"></el-input>
+                  <p>修改菜单名称: </p><el-input v-model="menuDetail.name" placeholder="菜单名称" type="text" clearable autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item prop="parentId" ref="parentId2" style="display: none">
                   <p>父级菜单: </p><el-cascader :options="allMenuData" :props="defaultData" clearable v-model="menuDetail.parentId" placeholder="请选择父级菜单"></el-cascader>
               </el-form-item>
               <el-form-item prop="url">
-                  <p>菜单跳转url: </p><el-input v-model="menuDetail.url" placeholder="菜单跳转url(没有则不填)" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>菜单跳转url: </p><el-input v-model="menuDetail.url" placeholder="菜单跳转url(没有则不填)" type="text" clearable></el-input>
               </el-form-item>
               <el-form-item prop="orderNum">
-                  <p>排序编号: </p><el-input v-model="menuDetail.orderNum" placeholder="请输入排序编号" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>排序编号: </p><el-input v-model="menuDetail.orderNum" placeholder="请输入排序编号" type="text" clearable></el-input>
               </el-form-item>
               <el-form-item prop="icon">
-                  <p>图标: </p><el-input v-model="menuDetail.icon" placeholder="菜单图标" type="text" prefix-icon="el-icon-search" clearable></el-input>
+                  <p>图标: </p><el-input v-model="menuDetail.icon" placeholder="菜单图标" type="text" clearable></el-input>
               </el-form-item>
               <div class="tipsInfo"><a href="https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=19238">点我获取图标库</a>(写入前加入iconfont icon-)</div>
             </el-form>

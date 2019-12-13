@@ -1,14 +1,14 @@
 <template>
     <div class="home_contaner">
         <!-- 侧边栏 style="display:none;" -->
-        <el-aside :width="isCollapse ? '64px':'220px'">
+        <el-aside :width="isCollapse ? '66px':'220px'">
             <div class="logo"><i>LOGO</i> SRM系统</div>
             <!-- 隐藏侧边栏时显示的图标L -->
             <div style="display: none" ref='reduceLogo' class="reduceLogo">L</div>
             <!-- 导航菜单start -->
-            <el-menu :default-active="$route.path" class="el-menu-vertical-demo" background-color="#24262F" text-color="#fff" unique-opened active-text-color="#fff" :collapse="isCollapse" :router="true" @select="asideChange">
+            <el-menu :default-active="$route.path" class="el-menu-vertical-demo" background-color="#24262F" text-color="#fff" unique-opened active-text-color="#fff" :collapse="isCollapse" :router="true" @select="asideChange" :collapse-transition="false">
                 <!-- 一级菜单 -->
-                <el-submenu :index="item.url + ''" v-for="item in navMenu" :key="item.menuId">
+                <el-submenu :index="item.url + ''" v-for="item in navMenu" :key="item.menuId" :hide-timeout="0" :show-timeout="0">
                     <template slot="title">
                       <!-- 图标 -->
                       <i :class="item.icon"></i>
@@ -29,13 +29,13 @@
         <el-container>
             <!-- 主体头部 -->
             <el-header>
-                <a @click="hiddenAside"><i class="iconfont icon-zhankai-"></i></a>宁波香格里拉供应链有限公司
+                <a @click="hiddenAside"><i :class="isCollapse === false ? 'iconfont icon-shousuocaidan': 'iconfont icon-shousuocaidan-copy'"></i></a>宁波香格里拉供应链有限公司
                 <span>普通会员</span>
                 <div class="el_header_right">
                     <el-badge :value="200" :max="99">
                         <el-button class="el-icon-bell"></el-button>
                     </el-badge>
-                    <a class="iconfont icon-move" @click="screenfull()"></a>
+                    <a :class="isFullscreen === false ? 'iconfont icon-zhankai': 'iconfont icon-shousuo'" @click="screenfull()"></a>
                     <el-dropdown trigger="click">
                         <span class="el-dropdown-link">
                             <img src="../assets/img/defaultHead.jpg" alt="">
@@ -55,7 +55,7 @@
                 <el-tabs v-model="editableTabsValue" type="border-card" @tab-remove="removeTab">
                     <!-- 主体导航栏主页 -->
                     <el-tab-pane>
-                        <span slot="label" @click="$router.push('/index')"><i class="iconfont icon-zhuye"></i></span>
+                        <span slot="label" @click="$router.push('/index')" ref="house"><i class="iconfont icon-zhuye"></i></span>
                         <router-view></router-view>
                     </el-tab-pane>
                     <el-tab-pane v-for="item in editableTabs" :key="item.name" :label="item.title" :name="item.name" closable>
@@ -66,7 +66,7 @@
                 <!-- 尾部按钮 -->
                 <el-dropdown>
                     <span class="el-dropdown-link">
-                        <i class="iconfont icon-jiantouxia el-icon--right"></i>
+                        <i class="iconfont icon-zhankai1 el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <a @click="closeOnePage()"><el-dropdown-item>关闭当前页面</el-dropdown-item></a>
@@ -211,9 +211,10 @@ export default {
   mounted() {
     window.onresize = () => {
       // 全屏下监控是否按键了ESC
-      if (!this.checkFull()) {
-        // 退出全屏
+      if (this.isFullscreen === true) {
         this.isFullscreen = false
+      } else {
+        this.isFullscreen = true
       }
     }
   },
@@ -221,7 +222,6 @@ export default {
     // 隐藏侧边栏
     hiddenAside() {
       this.isCollapse = !this.isCollapse
-      console.log(this.$refs.reduceLogo)
       let box = this.$refs.reduceLogo
       box.style.display === 'block' ? box.style.display = 'none' : box.style.display = 'block'
     },
@@ -253,8 +253,7 @@ export default {
               activeName = nextTab.name
               this.$router.push(nextTab.url)
             } else {
-              this.$router.push('home')
-              window.location.reload()
+              this.$refs.house.click()
             }
           }
         })
@@ -276,8 +275,7 @@ export default {
     // 导航栏下拉关闭所有页面
     closeAllPage() {
       this.editableTabs = []
-      this.$router.push('/index')
-      window.location.reload()
+      this.$refs.house.click()
     },
     // 退出登录状态
     async logout() {
@@ -344,7 +342,7 @@ export default {
       this.addTab(this.editableTabsValue, e._vnode.elm.innerText, index)
     },
     // 全屏模式
-    screenfull() {
+    screenfull(index) {
       if (screenfull.enabled) {
         this.$message({
           message: '您的浏览器无法进入全屏模式',
@@ -353,15 +351,6 @@ export default {
         return false
       }
       screenfull.toggle()
-      this.isFullscreen = true
-    },
-    // Esc 全屏监测
-    checkFull() {
-      let isFull = document.fullscreenEnabled || window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled
-      if (isFull === undefined) {
-        isFull = false
-      }
-      return isFull
     }
   }
 }
@@ -400,7 +389,7 @@ export default {
     left: 0;
     top: 0;
     height: 50px;
-    width: 64px;
+    width: 66px;
     line-height: 50px;
     text-align: center;
     font-size: 23px;
@@ -412,6 +401,9 @@ export default {
     border: 0;
     width: 220px;
     min-height: 400px;
+}
+.el-menu {
+  border: 0;
 }
 .el-menu i {
   margin-right: 5px;
@@ -466,7 +458,7 @@ export default {
     font-size: 14px;
 }
 .el_header_right a {
-    font-size: 20px;
+    font-size: 18px;
     margin-left: 30px;
     margin-right: 0;
 }
@@ -545,13 +537,13 @@ export default {
 .footer_right>a {
     flex: 1;
     display: flex;
+    margin: 5px 10px;
     flex-direction: column;
     align-items: center;
     width: 100px;
 }
 .footer_right>a i {
     font-size: 30px;
-    margin: 5px 10px;
     color: #959595;
 }
 .footer_right>a:nth-child(1) i {

@@ -175,12 +175,12 @@ export default {
 .login_header {
     position: relative;
     width: 100%;
-    height: 100px;
+    height: 10%;
 }
 .login_header h1 {
     position: absolute;
     width: 370px;
-    height: 100px;
+    height: 100%;
 }
 .login_header h1 a {
     margin: 0 60px;
@@ -203,19 +203,21 @@ export default {
 
 .login_body {
     position: relative;
-    height: 700px;
+    height: 70%;
     background-color: #000;
 }
 .login_box {
     position: absolute;
     top: 50%;
-    right: 18%;
-    height: 510px;
+    right: 10%;
+    height: 77.74%;
     width: 430px;
     background-color: #fff;
     border-radius: 8px;
+    // border: 1px solid #FEEFA3;
     transform: translate(0,-50%);
     z-index: 1;
+    box-shadow:0px 0px  10px 1px #FEEFA3;
 }
 .login_box .tabs {
     box-sizing: border-box;
@@ -245,10 +247,12 @@ export default {
 .form_layout .el-link {
     flex: 1;
 }
-
+.login_footer {
+  position: relative;
+}
 .login_footer span {
     position: absolute;
-    top: 820px;
+    top: 20px;
     left: 50%;
     width: 650px;
     height: 20px;
@@ -257,7 +261,7 @@ export default {
 }
 .login_footer p {
     position: absolute;
-    top: 854px;
+    top: 50px;
     left: 50%;
     height: 20px;
     font-size: 14px;
@@ -267,7 +271,7 @@ export default {
 // 特效波形图
 .bolang {
     position: absolute;
-    top: 661px;
+    top: 65%;
     width: 100%;
 }
 .waves {
@@ -301,7 +305,7 @@ export default {
 }
 @keyframes move-forever {
   0% {
-   transform: translate3d(-90px,0,0);
+    transform: translate3d(-90px,0,0);
   }
   100% {
     transform: translate3d(85px,0,0);

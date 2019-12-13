@@ -97,7 +97,6 @@ export default {
     async getUserInfo() {
       const { data: res } = await getUserInfoApi()
       this.ruleForm = res.data.user
-      console.log(this.ruleForm)
     },
     // 上传图片成功时获取图片地址
     getImgAddress(res, file) {
@@ -108,7 +107,6 @@ export default {
         if (valid) {
           alert('submit!')
         } else {
-          console.log('error submit!!')
           return false
         }
       })

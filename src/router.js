@@ -18,7 +18,10 @@ import RuleManage from './components/systemManange/roleManage.vue'
 import Lunzi from './components/lunzi.vue'
 import Lunzi2 from './components/lunzi2.vue'
 Vue.use(Router)
-
+const routerPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error => error)
+}
 const router = new Router({
   routes: [{
     path: '/',

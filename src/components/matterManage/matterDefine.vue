@@ -29,8 +29,8 @@
         </el-row>
         <!-- 物料定义表格区 -->
         <el-row>
-            <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" show-overflow-tooltip :default-sort = "{prop: 'date', order: 'descending'}" @selection-change="handleSelectionChange">
-              <el-table-column type="selection" width="36" show-overflow-tooltip align="center"></el-table-column>
+            <el-table tooltip-effect="dark" ref="multipleTable" :data="tableData" border style="width: 100%" show-overflow-tooltip :default-sort = "{prop: 'date', order: 'descending'}">
+              <el-table-column type="selection" width="36" show-overflow-tooltip></el-table-column>
               <el-table-column label="商品图片" min-width="8%" align="center">
                 <template slot-scope="scope">
                   <img v-if="scope.row.pic !== ''" :src="scope.row.pic">
@@ -386,10 +386,6 @@ export default {
       this.matterDefineData.status = 2
       this.matterDefine()
     },
-    // 获取每行数据
-    handleSelectionChange(val) {
-      console.log(val)
-    },
     // 删除选中状态的数据
     delSelection() {
       let idArr = []
@@ -533,7 +529,6 @@ export default {
   width: 80px;
   height: 34px;
   background: rgba(255,255,255,1);
-  border: 1px solid rgba(220,220,220,1);
   border-radius: 3px;
   color: #666;
   line-height: 0
