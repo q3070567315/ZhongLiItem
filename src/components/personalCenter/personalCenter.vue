@@ -6,12 +6,15 @@
             <el-upload
               class="avatar-uploader"
               action="http://apisrm.soolcool.com/sys/common/upload-pic"
-              :on-success="getImgAddress"
               :show-file-list="false"
-              :limit="1"
-              ref='uploadImg'>
+              :on-success="handleAvatarSuccess"
+              :on-remove="handleRemove"
+              :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <img v-else class="avatar-uploader-icon el-icon-plus" src="../../assets/img/defaultHead.jpg">
+              <span v-if="imageUrl" class="el-upload-action" @click.stop="handleRemove()">
+                  <i class="el-icon-delete"></i>
+              </span>
+              <i v-else class="el-icon-upload2 avatar-uploader-icon" stop></i>
             </el-upload>
           </div>
           <div class="info">
@@ -98,21 +101,25 @@ export default {
       const { data: res } = await getUserInfoApi()
       this.ruleForm = res.data.user
     },
-    // 上传图片成功时获取图片地址
-    getImgAddress(res, file) {
+    // 移除图片
+    handleRemove() {
+      this.imageUrl = ''
+    },
+    // 上传成功回调
+    handleAvatarSuccess(res, file) {
       this.imageUrl = res.data.url
     },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          return false
-        }
-      })
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    // 上传前格式和图片大小限制
+    beforeAvatarUpload(file) {
+      const type = file.type === 'image/jpeg' || 'image/jpg' || 'image/webp' || 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!type) {
+        this.$message.error('图片格式不正确!(只能包含jpg，png，webp，JPEG)')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 2MB!')
+      }
+      return type && isLt2M
     }
   }
 }
@@ -138,28 +145,53 @@ header {
   border-radius: 50%;
 }
 // 用户头像
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
+.avatar-uploader{
+  margin-top: -4px;
+  width: 120PX;
+  height: 120px;
   border-radius: 50%;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
+  background: url('../../assets/img/defaultHead.jpg') no-repeat;
+  background-size: 100% 100%;
+  box-shadow: 0 0 0 4px rgba(0,0,0,.1);
 }
-.avatar-uploader-icon {
-  border-radius: 50%;
-  width: 119px;
-  height: 119px;
-}
-.avatar-uploader-icon:hover {
-  border: 1px solid #3C8DBC;
-  font-size: 28px;
-  color: #8c939d;
+.avatar-uploader-icon{
+  font-size: 0;
+  color: #fff;
+  width: 120px;
+  height: 120px;
   line-height: 120px;
   text-align: center;
 }
+.avatar-uploader-icon:hover{
+  font-size: 28px;
+  background-color: rgba(0, 0, 0, .3);
+}
 .avatar {
+  position: relative;
   width: 120px;
   height: 120px;
   display: block;
+}
+.el-upload-action {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 0;
+  color: #fff;
+  text-align: center;
+  line-height: 120px;
+
+}
+.el-upload-action:hover {
+  font-size: 20px;
+  background-color: #000;
+  background-color: rgba(0, 0, 0, .3)
 }
 
 .info {

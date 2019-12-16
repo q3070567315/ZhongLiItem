@@ -6,9 +6,9 @@
         <!-- 锁定选择区 -->
         <el-row>
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1" @click="allData">全部</el-menu-item>
-            <el-menu-item index="2" @click="unLockData">未锁定</el-menu-item>
-            <el-menu-item index="3" @click="lockData">已锁定</el-menu-item>
+            <el-menu-item index="1" @click="switchData(0)">全部</el-menu-item>
+            <el-menu-item index="2" @click="switchData(1)">未锁定</el-menu-item>
+            <el-menu-item index="3" @click="switchData(2)">已锁定</el-menu-item>
           </el-menu>
         </el-row>
         <!-- 内容搜索区 -->
@@ -371,19 +371,9 @@ export default {
       if (this.$refs.refHandle) { this.$refs.refHandle.dropDownVisible = false }
       if (this.$refs.refHand) { this.$refs.refHand.dropDownVisible = false }
     },
-    // 点击展示全部数据(包含锁定和未锁定的)
-    allData() {
-      this.matterDefineData.status = 0
-      this.matterDefine()
-    },
-    // 点击展示未锁定数据
-    unLockData() {
-      this.matterDefineData.status = 1
-      this.matterDefine()
-    },
-    // 点击展示锁定数据
-    lockData() {
-      this.matterDefineData.status = 2
+    // 点击展示切换数据(包含锁定和未锁定的)
+    switchData(status) {
+      this.matterDefineData.status = status
       this.matterDefine()
     },
     // 删除选中状态的数据

@@ -64,7 +64,7 @@
                     </el-tab-pane>
                 </el-tabs>
                 <!-- 尾部按钮 -->
-                <el-dropdown>
+                <el-dropdown :show-timeout="0" :hide-timeout="0">
                     <span class="el-dropdown-link">
                         <i class="iconfont icon-zhankai1 el-icon--right"></i>
                     </span>

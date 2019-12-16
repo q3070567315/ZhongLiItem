@@ -15,6 +15,11 @@ import ContractManage from './components/contractManage/contractManage.vue'
 import ExpertMaintain from './components/expertManage/expertMaintain.vue'
 import MenuManage from './components/systemManange/menuManage.vue'
 import RuleManage from './components/systemManange/roleManage.vue'
+import AllowSellApplicate from './components/customerManage/allowSellApplicate.vue'
+import OrderConfirm from './components//customerManage/orderConfirm.vue'
+import OnlineDelivery from './components/customerManage/onlineDelivery.vue'
+import InvoiceInfo from './components/customerManage/invoiceInfo.vue'
+import OnlineReconcile from './components/customerManage/onlineReconcile.vue'
 import Lunzi from './components/lunzi.vue'
 import Lunzi2 from './components/lunzi2.vue'
 Vue.use(Router)
@@ -52,50 +57,80 @@ const router = new Router({
       path: '/personalCenter',
       component: PersonalCenter
     },
-    // 采购订单
+    // 采购协同
+    // 1.采购订单
     {
       path: '/purchaseOrder',
       component: PurchaseOrder
     },
-    // 在线收货确认
+    // 2.在线收货确认
     {
       path: '/onlineConfirmation',
       component: OnlineConfirmation
     },
-    // 发票信息确认
+    // 3.发票信息确认
     {
       path: '/invoiceInforConfirm',
       component: InvoiceInforConfirm
     },
-    // 物料分类
+    // 物料管理
+    // 1.物料分类
     {
       path: '/matterCategory',
       component: MatterCategory
     },
-    // 物料定义
+    // 2.物料定义
     {
       path: '/matterDefine',
       component: MatterDefine
     },
     // 合同管理
+    // 1.合同列表
     {
       path: '/contractManage',
       component: ContractManage
     },
-    // 专家维护
+    // 2.专家维护
     {
       path: '/expertMaintain',
       component: ExpertMaintain
     },
-    // 菜单管理
+    // 系统管理
+    // 1.菜单管理
     {
       path: '/menuManage',
       component: MenuManage
     },
-    // 角色管理
+    // 2.角色管理
     {
       path: '/ruleManage',
       component: RuleManage
+    },
+    // 客户管理
+    // 1.允销申请
+    {
+      path: '/allowSellApplicate',
+      component: AllowSellApplicate
+    },
+    // 2.订单确认
+    {
+      path: '/orderConfirm',
+      component: OrderConfirm
+    },
+    // 3.在线送货
+    {
+      path: '/onlineDelivery',
+      component: OnlineDelivery
+    },
+    // 4.发票信息
+    {
+      path: '/invoiceInfo',
+      component: InvoiceInfo
+    },
+    // 5.在线对账
+    {
+      path: '/onlineReconcile',
+      component: OnlineReconcile
     },
     // 轮子
     {

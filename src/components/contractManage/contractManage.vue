@@ -6,10 +6,10 @@
         <!-- 锁定选择区 -->
         <el-row>
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="1" @click="allData">全部</el-menu-item>
-            <el-menu-item index="2" @click="unAgreeData">待确定</el-menu-item>
-            <el-menu-item index="3" @click="unPurchaseData">待采购商确认</el-menu-item>
-            <el-menu-item index="4" @click="agreeData">已确认</el-menu-item>
+            <el-menu-item index="1" @click="switchData(0)">全部</el-menu-item>
+            <el-menu-item index="2" @click="switchData(1)">待确定</el-menu-item>
+            <el-menu-item index="3" @click="switchData(2)">待对方确认</el-menu-item>
+            <el-menu-item index="4" @click="switchData(3)">已确认</el-menu-item>
           </el-menu>
         </el-row>
         <!-- 内容搜索区 -->
@@ -39,14 +39,14 @@
             <el-table-column prop="status" label="状态" min-width="22%" show-overflow-tooltip>
               <template slot-scope="scope">
                   <div v-if="scope.row.status === 1 && scope.row.toId === userId"><p style="background-color: #FCED32;"></p>待我确认</div>
-                  <div v-else-if="scope.row.status === 1 && scope.row.fromId === userId"><p style="background-color: #409EFF;"></p>待采购商确认</div>
+                  <div v-else-if="scope.row.status === 1 && scope.row.fromId === userId"><p style="background-color: #409EFF;"></p>待对方确认</div>
                   <div v-if="scope.row.status === 2"><p style="background-color: #7FFF00;"></p>已确认</div>
               </template>
             </el-table-column>
             <el-table-column label="操作" min-width="20%" show-overflow-tooltip>
               <template slot-scope="scope">
                 <div v-if="scope.row.status === 1 && scope.row.toId === userId"><a style="color: #409EFF; font-size: 14px" @click="agreeContract(scope.row.id)">确认</a></div>
-                <div v-else-if="scope.row.status === 1 && scope.row.fromId === userId"><a style="color: #409EFF; font-size: 14px; cursor: default;">采购商确认</a></div>
+                <div v-else-if="scope.row.status === 1 && scope.row.fromId === userId"><a style="color: #409EFF; font-size: 14px; cursor: default;">对方确认</a></div>
                 <div v-if="scope.row.status === 2">-</div>
               </template>
             </el-table-column>
@@ -390,24 +390,9 @@ export default {
     clearSelection() {
       this.$refs.multipleTable.clearSelection()
     },
-    // 点击展示全部数据
-    allData() {
-      this.contractManageData.type = 0
-      this.contractManage()
-    },
-    // 点击展示待确认数据
-    unAgreeData() {
-      this.contractManageData.type = 1
-      this.contractManage()
-    },
-    // 点击展示待采购商确认数据
-    unPurchaseData() {
-      this.contractManageData.type = 2
-      this.contractManage()
-    },
-    // 点击展示已确认数据
-    agreeData() {
-      this.contractManageData.type = 3
+    // 点击展示切换数据
+    switchData(type) {
+      this.contractManageData.type = type
       this.contractManage()
     },
     // 新增商品信息
